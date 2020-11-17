@@ -1,0 +1,230 @@
+<html>
+Filters down to arduino mega only*
+some of the data are signed I think
+<input type="button" onclick="connect()">
+<input type="button" onclick="writeserial()">
+<script type="text/javascript">
+if ("serial" in navigator) {
+  console.log("The Serial API is supported.");
+}
+
+
+async function connect() {
+  // get previously granted ports:
+  // await const ports = await navigator.serial.getPorts();
+  // ask user all ports no filter:
+  // await const port = navigator.serial.requestPort();
+
+  const filters = [
+    { usbVendorId: 0x2341, usbProductId: 0x0042 } // arduino mega
+  ];
+  window.port = await navigator.serial.requestPort({ filters });
+
+  // removed:?
+  // const { usbProductId, usbVendorId } = port.getInfo();
+
+  await port.open({ baudRate: 115200, baudrate: 115200 }); // twice due to change in recent chrome version
+  readloop();
+  // write(port);
+}
+
+async function writeserial() {
+  const writer = port.writable.getWriter();
+
+  // const data = new Uint8Array([104, 101, 108, 108, 111]); // hello
+  const data = new Uint8Array([0x41]); // A - requests live data packet
+  await writer.write(data);
+  // console.log("written");
+
+  // Allow the serial port to be closed later.
+  writer.releaseLock();
+}
+
+window.buffer = [];
+
+async function readloop() {
+  // Without transform streams.
+
+  const reader = port.readable.getReader();
+
+  // Listen to data coming from the serial device.
+  while (true) {
+    // console.log("waiting to read");
+    const { value, done } = await reader.read();
+    if (done) {
+      reader.releaseLock();
+      break;
+    }
+    // value is a Uint8Array.
+    // console.log(value);
+    for (thing in value) {
+      window.buffer.push(thing);
+    }
+    parseBuffer();
+  }
+
+  // Force reader.read() to resolve immediately and subsequently
+  // call reader.releaseLock() in the loop example above.
+  await reader.cancel();
+  await port.close();
+}
+
+function parseBuffer() {
+  if (window.buffer.length < 117) {
+    console.log("need more data");
+    return;
+  } else if (window.buffer.length > 117) {
+    console.log("got too much data");
+    window.buffer = [];
+    return;
+  }
+  console.log("got the right amount of data, going to parse it");
+
+  currentStatus = {};
+
+  currentStatus.secl = window.buffer[0]; //secl is simply a counter that increments each second. Used to track unexpected resets (Which will reset this count to 0)
+  currentStatus.status1 = window.buffer[1]; //status1 Bitfield
+  currentStatus.engine = window.buffer[2]; //Engine Status Bitfield
+  currentStatus.syncLossCounter = window.buffer[3];
+
+  currentStatus.MAP = (window.buffer[4] << 8) + window.buffer[5];
+
+  currentStatus.IAT = window.buffer[6]; //mat
+  currentStatus.coolant = window.buffer[7]; //Coolant ADC
+  currentStatus.batCorrection = window.buffer[8]; //Battery voltage correction (%)
+  currentStatus.battery = window.buffer[9]; //battery voltage (was currentStatus.battery10)
+  currentStatus.O2 = window.buffer[10]; //O2
+  currentStatus.egoCorrection = window.buffer[11]; //Exhaust gas correction (%)
+  currentStatus.iatCorrection = window.buffer[12]; //Air temperature Correction (%)
+  currentStatus.wueCorrection = window.buffer[13]; //Warmup enrichment (%)
+
+  // window.buffer[14] = lowByte(currentStatus.RPM); //rpm HB
+  // window.buffer[15] = highByte(currentStatus.RPM); //rpm LB
+  // currentStatus.RPM = (window.buffer[14] << 8) + window.buffer[15];
+
+  currentStatus.AEamount = window.buffer[16] << 1; //TPS acceleration enrichment (%) divided by 2 (Can exceed 255) (was (byte)(currentStatus.AEamount >> 1))
+
+  // window.buffer[17] = lowByte(currentStatus.corrections); //Total GammaE (%)
+  // window.buffer[18] = highByte(currentStatus.corrections); //Total GammaE (%)
+
+  currentStatus.VE1 = window.buffer[19]; //VE 1 (%)
+  currentStatus.VE2 = window.buffer[20]; //VE 2 (%)
+  currentStatus.afrTarget = window.buffer[21];
+  currentStatus.tpsDOT = window.buffer[22]; //TPS DOT
+  currentStatus.advance = window.buffer[23];
+  currentStatus.TPS = window.buffer[24]; // TPS (0% to 100%)
+
+  // //Need to split the int loopsPerSecond value into 2 bytes
+  // if(currentStatus.loopsPerSecond > 60000) { currentStatus.loopsPerSecond = 60000;}
+  // window.buffer[25] = lowByte(currentStatus.loopsPerSecond);
+  // window.buffer[26] = highByte(currentStatus.loopsPerSecond);
+  // currentStatus.loopsPerSecond = (window.buffer[25] << 8) + window.buffer[26]
+
+  // //The following can be used to show the amount of free memory
+  // currentStatus.freeRAM = freeRam();
+  // window.buffer[27] = lowByte(currentStatus.freeRAM); //(byte)((currentStatus.loopsPerSecond >> 8) & 0xFF);
+  // window.buffer[28] = highByte(currentStatus.freeRAM);
+
+  // window.buffer[29] = (byte)(currentStatus.boostTarget >> 1); //Divide boost target by 2 to fit in a byte
+  // window.buffer[30] = (byte)(currentStatus.boostDuty / 100);
+
+  currentStatus.spark = window.buffer[31]; //Spark related bitfield
+
+  // //rpmDOT must be sent as a signed integer
+  // window.buffer[32] = lowByte(currentStatus.rpmDOT);
+  // window.buffer[33] = highByte(currentStatus.rpmDOT);
+
+  currentStatus.ethanolPct = window.buffer[34]; //Flex sensor value (or 0 if not used)
+  currentStatus.flexCorrection = window.buffer[35]; //Flex fuel correction (% above or below 100)
+  currentStatus.flexIgnCorrection = window.buffer[36]; //Ignition correction (Increased degrees of advance) for flex fuel
+  //
+  currentStatus.idleLoad = window.buffer[37];
+  currentStatus.testOutputs = window.buffer[38];
+  //
+  currentStatus.O2_2 = window.buffer[39]; //O2
+  currentStatus.baro = window.buffer[40]; //Barometer value
+  //
+  // window.buffer[41] = lowByte(currentStatus.canin[0]);
+  // window.buffer[42] = highByte(currentStatus.canin[0]);
+  // window.buffer[43] = lowByte(currentStatus.canin[1]);
+  // window.buffer[44] = highByte(currentStatus.canin[1]);
+  // window.buffer[45] = lowByte(currentStatus.canin[2]);
+  // window.buffer[46] = highByte(currentStatus.canin[2]);
+  // window.buffer[47] = lowByte(currentStatus.canin[3]);
+  // window.buffer[48] = highByte(currentStatus.canin[3]);
+  // window.buffer[49] = lowByte(currentStatus.canin[4]);
+  // window.buffer[50] = highByte(currentStatus.canin[4]);
+  // window.buffer[51] = lowByte(currentStatus.canin[5]);
+  // window.buffer[52] = highByte(currentStatus.canin[5]);
+  // window.buffer[53] = lowByte(currentStatus.canin[6]);
+  // window.buffer[54] = highByte(currentStatus.canin[6]);
+  // window.buffer[55] = lowByte(currentStatus.canin[7]);
+  // window.buffer[56] = highByte(currentStatus.canin[7]);
+  // window.buffer[57] = lowByte(currentStatus.canin[8]);
+  // window.buffer[58] = highByte(currentStatus.canin[8]);
+  // window.buffer[59] = lowByte(currentStatus.canin[9]);
+  // window.buffer[60] = highByte(currentStatus.canin[9]);
+  // window.buffer[61] = lowByte(currentStatus.canin[10]);
+  // window.buffer[62] = highByte(currentStatus.canin[10]);
+  // window.buffer[63] = lowByte(currentStatus.canin[11]);
+  // window.buffer[64] = highByte(currentStatus.canin[11]);
+  // window.buffer[65] = lowByte(currentStatus.canin[12]);
+  // window.buffer[66] = highByte(currentStatus.canin[12]);
+  // window.buffer[67] = lowByte(currentStatus.canin[13]);
+  // window.buffer[68] = highByte(currentStatus.canin[13]);
+  // window.buffer[69] = lowByte(currentStatus.canin[14]);
+  // window.buffer[70] = highByte(currentStatus.canin[14]);
+  // window.buffer[71] = lowByte(currentStatus.canin[15]);
+  // window.buffer[72] = highByte(currentStatus.canin[15]);
+  //
+  currentStatus.tpsADC = window.buffer[73];
+  // window.buffer[74] = getNextError();
+  //
+  // window.buffer[75] = lowByte(currentStatus.PW1); //Pulsewidth 1 multiplied by 10 in ms. Have to convert from uS to mS.
+  // window.buffer[76] = highByte(currentStatus.PW1); //Pulsewidth 1 multiplied by 10 in ms. Have to convert from uS to mS.
+  // window.buffer[77] = lowByte(currentStatus.PW2); //Pulsewidth 2 multiplied by 10 in ms. Have to convert from uS to mS.
+  // window.buffer[78] = highByte(currentStatus.PW2); //Pulsewidth 2 multiplied by 10 in ms. Have to convert from uS to mS.
+  // window.buffer[79] = lowByte(currentStatus.PW3); //Pulsewidth 3 multiplied by 10 in ms. Have to convert from uS to mS.
+  // window.buffer[80] = highByte(currentStatus.PW3); //Pulsewidth 3 multiplied by 10 in ms. Have to convert from uS to mS.
+  // window.buffer[81] = lowByte(currentStatus.PW4); //Pulsewidth 4 multiplied by 10 in ms. Have to convert from uS to mS.
+  // window.buffer[82] = highByte(currentStatus.PW4); //Pulsewidth 4 multiplied by 10 in ms. Have to convert from uS to mS.
+  //
+  currentStatus.status3 = window.buffer[83];
+  currentStatus.engineProtectStatus = window.buffer[84];
+  // window.buffer[85] = lowByte(currentStatus.fuelLoad);
+  // window.buffer[86] = highByte(currentStatus.fuelLoad);
+  // window.buffer[87] = lowByte(currentStatus.ignLoad);
+  // window.buffer[88] = highByte(currentStatus.ignLoad);
+  // window.buffer[89] = lowByte(currentStatus.dwell);
+  // window.buffer[90] = highByte(currentStatus.dwell);
+  currentStatus.CLIdleTarget = window.buffer[91];
+  currentStatus.mapDOT = window.buffer[92];
+  // window.buffer[93] = (int8_t)currentStatus.vvt1Angle;
+  currentStatus.vvt1TargetAngle = window.buffer[94];
+  currentStatus.vvt1Duty = window.buffer[95];
+  // window.buffer[96] = lowByte(currentStatus.flexBoostCorrection);
+  // window.buffer[97] = highByte(currentStatus.flexBoostCorrection);
+  currentStatus.baroCorrection = window.buffer[98];
+  currentStatus.VE = window.buffer[99]; //Current VE (%). Can be equal to VE1 or VE2 or a calculated value from both of them
+  currentStatus.ASEValue = window.buffer[100]; //Current ASE (%)
+  // window.buffer[101] = lowByte(currentStatus.vss);
+  // window.buffer[102] = highByte(currentStatus.vss);
+  // window.buffer[103] = currentStatus.gear;
+  // window.buffer[104] = currentStatus.fuelPressure;
+  // window.buffer[105] = currentStatus.oilPressure;
+  // window.buffer[106] = currentStatus.wmiPW;
+  // window.buffer[107] = currentStatus.wmiEmpty;
+  // window.buffer[108] = (int8_t)currentStatus.vvt2Angle;
+  // window.buffer[109] = currentStatus.vvt2TargetAngle;
+  // window.buffer[110] = currentStatus.vvt2Duty;
+  // window.buffer[111] = currentStatus.outputsStatus;
+  // window.buffer[112] = (byte)(currentStatus.fuelTemp + CALIBRATION_TEMPERATURE_OFFSET); //Fuel temperature from flex sensor
+  // window.buffer[113] = currentStatus.fuelTempCorrection; //Fuel temperature Correction (%)
+  // window.buffer[114] = currentStatus.advance1; //advance 1 (%)
+  // window.buffer[115] = currentStatus.advance2; //advance 2 (%)
+  // window.buffer[116] = 0; //Currently unused
+
+  console.log(currentStatus);
+  window.buffer = [];
+}
+</script>
