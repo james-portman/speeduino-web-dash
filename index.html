@@ -1,280 +1,1229 @@
 <html>
-some of the data are signed I think, they look wrong<br/>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- <meta http-equiv="refresh" content="1"> -->
+<style>
+@font-face {
+  font-family: 'latoBoldItalic';
+  src: url('fonts/lato/Lato-BoldItalic.ttf')  format('truetype');
+}
+
+html {
+}
+
+body {
+  font-family: sans-serif;
+  /* background: #000; */
+  background: url("background-cf.jpg");
+  background-size: cover; /*contain;*/
+  color: #eee;
+  margin: 0;
+  padding: 0;
+}
+
+div {
+  margin: 0;
+  padding: 0;
+}
+
+#pidisplayBorder {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  /* background: #222; */
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+#tach {
+  position: fixed;
+  background: -webkit-linear-gradient(#3a3a3a, #222);
+  border-radius: 50%;
+}
+
+
+#tachOuter {
+  position: fixed;
+  border-radius: 50%;
+  border: 4px solid #ccc;
+  box-sizing: border-box;
+}
+#tachOuterDark {
+  position: fixed;
+  border-radius: 50%;
+  border: 12px solid #222222;
+  box-sizing: border-box;
+}
+
+
+
+.tachTickContainer {
+  position: fixed;
+  transform: rotate(0deg);
+}
+.tachTick {
+  margin-left: 49.7%;
+  width: 1%;
+  height: 6%;
+  background: -webkit-linear-gradient(#ccc, #ddd);
+}
+.tachHalfTick {
+  position: fixed;
+  margin-left: 49.8%;
+  width: 0.5%;
+  height: 5%;
+  top: 1%;
+  background: -webkit-linear-gradient(#888, #999);
+}
+
+.tachTinyTick {
+  position: fixed;
+  margin-left: 49.8%;
+  width: 0.5%;
+  height: 1%;
+  top: 5%;
+  background: -webkit-linear-gradient(#666, #777);
+}
+
+
+#tachNeedle {
+  position: fixed;
+  transform: rotate(0deg);
+  transition: transform 100ms ease-in-out;
+}
+#tachNeedleActualBase {
+  height: 1%;
+  width: 4%;
+  position: fixed;
+  top: 76.5%;
+  left: 48%;
+  background-color: #000;
+  border-top: 2px solid;
+  border-left: 2px solid;
+  border-right: 2px solid;
+  border-color: #444;
+  box-sizing: border-box;
+}
+
+#tachNeedleActual {
+  height: 21%;
+  width: 1.5%;
+  position: fixed;
+  left: 49.25%;
+  top: 77%;
+  background-color: #e11;
+  box-shadow: 0px 0px 3px #000;
+}
+
+.tachNumber {
+  font-family: latoBoldItalic;
+  position: fixed;
+  font-style: italic;
+  font-weight: 550;
+
+  font-size: 72px;
+  background: -webkit-linear-gradient(#fff, #ccc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#tach_6, #tach_7 {
+  background: -webkit-linear-gradient(#e11, #c00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+
+
+#boostNeedle {
+  position: fixed;
+  transform: rotate(90deg);
+  transition: transform 100ms ease-in-out;
+}
+#boostNeedleActualBase {
+  height: 1%;
+  width: 4%;
+  position: fixed;
+  top: 22.1%;
+  left: 48%;
+  background-color: #000;
+  border-bottom: 2px solid;
+  border-left: 2px solid;
+  border-right: 2px solid;
+  border-color: #444;
+  box-sizing: border-box;
+}
+
+#boostNeedleActual {
+  height: 15%;
+  width: 1.5%;
+  position: fixed;
+  left: 49.25%;
+  top: 8%;
+  background-color: #08f;
+  /* background-color: #b00; */
+  box-shadow: 0px 0px 3px #000;
+}
+
+#boostMaxMarker {
+  position: fixed;
+  transform: rotate(90deg);
+  /* transition: transform 100ms ease-in-out; */
+}
+#boostMaxMarkerBase {
+  height: 1%;
+  width: 4%;
+  position: fixed;
+  top: 2%;
+  left: 48%;
+  background-color: #08f;
+  /* border-bottom: 2px solid;
+  border-left: 2px solid;
+  border-right: 2px solid;
+  border-color: #444;
+  box-sizing: border-box; */
+}
+
+
+
+.boostTickContainer {
+  position: fixed;
+  transform: rotate(0deg);
+}
+.boostTick {
+  margin-left: 49.5%;
+  width: 1%;
+  height: 6%;
+  background: -webkit-linear-gradient(#ccc, #ddd);
+}
+.boostHalfTick {
+  position: fixed;
+  margin-left: 49.8%;
+  width: 0.5%;
+  height: 5%;
+  top: 1%;
+  /* background-color: #ccc; */
+  background: -webkit-linear-gradient(#888, #999);
+}
+
+.boostTinyTick {
+  position: fixed;
+  margin-left: 49.8%;
+  width: 0.5%;
+  height: 1%;
+  top: 5%;
+  /* background-color: #ccc; */
+  background: -webkit-linear-gradient(#666, #777);
+}
+
+.boostNumber {
+  font-family: latoBoldItalic;
+  position: fixed;
+  font-style: italic;
+  font-weight: 550;
+
+  font-size: 22px;
+  background: -webkit-linear-gradient(#fff, #ccc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+.redTick {
+  background: -webkit-linear-gradient(#f00, #b00);
+}
+
+
+
+#tachCentreBelowNeedle {
+  position: fixed;
+  background: -webkit-linear-gradient(#222, #000);
+  border-radius: 50%;
+}
+
+#tachCentre {
+  position: fixed;
+  background: -webkit-linear-gradient(#222, #000);
+  border-radius: 50%;
+  box-shadow: 0px 0px 4px #aaa;
+}
+
+#mphLabel {
+  position: fixed;
+  text-align: center;
+  font-family: latoBoldItalic;
+  color: #aaa;
+}
+#mphValue {
+  font-family: latoBoldItalic;
+  font-size: 100px;
+  position: fixed;
+  text-align: center;
+}
+
+
+
+#gears {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+}
+
+.gear {
+  display: inline-block;
+  align-self: flex-end;
+  transition: font-size 250ms ease-in-out;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-top: auto;
+  font-family: latoBoldItalic;
+}
+.activegear {
+  transition: font-size 250ms;
+  font-size: 45px;
+  color: orange;
+}
+
+
+.flashingYellow {
+  -webkit-animation: flashingYellowAnimation 1s infinite;  /* Safari 4+ */
+  -moz-animation: flashingYellowAnimation 1s infinite;  /* Fx 5+ */
+  -o-animation: flashingYellowAnimation 1s infinite;  /* Opera 12+ */
+  animation: flashingYellowAnimation 1s infinite;  /* IE 10+, Fx 29+ */
+}
+.flashingRed {
+  -webkit-animation: flashingRedAnimation 0.3s infinite;  /* Safari 4+ */
+  -moz-animation: flashingRedAnimation 0.3s infinite;  /* Fx 5+ */
+  -o-animation: flashingRedAnimation 0.3s infinite;  /* Opera 12+ */
+  animation: flashingRedAnimation 0.3s infinite;  /* IE 10+, Fx 29+ */
+}
+@-webkit-keyframes flashingYellowAnimation {
+  0%, 49% { background-color: rgb(255, 255, 0); }
+  50%, 100% { background-color: #222; }
+}
+@-webkit-keyframes flashingRedAnimation {
+  0%, 49% { background-color: rgb(255, 0, 0); }
+  50%, 100% { background-color: #222; }
+}
+
+
+#leftDataPanel {
+  position: fixed;
+  width: 16%;
+}
+
+#rightDataPanel {
+  position: fixed;
+  width: 16%;
+}
+
+.datapanel {
+  width: 100%;
+  min-height: 15%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  background-color: #333;
+  text-align: center;
+  color: #aaa;
+}
+.datapanel .value {
+  font-size: 2.5em;
+}
+.datapanel .valueLong {
+  font-size: 2em;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+}
+.datapanel .label {
+  /* font-size: 0.7em; */
+  color: #aaa;
+  text-transform: capitalize;
+}
+.datapanel.alarm, .datapanel.alarm .label  {
+  background: red;
+  color: #fff;
+}
+.datapanel.blue, .datapanel.blue .label  {
+  background: blue;
+  color: #fff;
+}
+
+#mashTheButton {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+#hiddenButtons {
+  display: none;
+  position: fixed;
+}
+#hiddenButtons div {
+  cursor: pointer;
+  background: #333;
+  padding: 1em;
+  color: #aaa;
+  margin-bottom: 2em;
+  text-align: center;
+}
+
+
+
+#rpmBar {
+  display: none;
+  position: fixed;
+  height: 20px;
+  width: 100%;
+  background: #fff;
+}
+.rpmBarColor {
+  display: inline-block;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+#rpmGreen {
+  background: lime;
+  width: 60%;
+}
+#rpmYellow {
+  background: yellow;
+  width: 20%;
+}
+#rpmRed {
+  background: red;
+  width: 20%;
+}
+#rpmBlock {
+  background: #555;
+  height: 20px;
+  position: relative;
+  top: -20px;
+  margin-left: 0%;
+  transition: margin-left 100ms ease-in-out;
+}
+
+#disconnected {
+  position: fixed;
+  left: 20%;
+  width: 60%;
+  background: red;
+  color: white;
+  font-size: 2em;
+  padding: 0.5em 0;
+  text-align: center;
+}
+
+</style>
+</head>
+<body>
+
+
+<div id="pidisplayBorder"></div>
+
+<div id="rpmBar">
+  <div class="rpmBarColor" id="rpmGreen"></div><div class="rpmBarColor" id="rpmYellow"></div><div class="rpmBarColor" id="rpmRed"></div>
+  <div id="rpmBlock"></div>
+</div>
+
+<div id="tach">
+
+  <div id="tachRedSlice"></div>
+
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick redTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick redTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick redTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick redTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick redTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick redTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick redTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick redTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick redTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick redTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick redTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick redTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick redTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick redTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick redTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTinyTick redTick"></div></div>
+
+  <div class="tachTickContainer"><div class="tachHalfTick"></div></div>
+  <div class="tachTickContainer"><div class="tachHalfTick"></div></div>
+  <div class="tachTickContainer"><div class="tachHalfTick"></div></div>
+  <div class="tachTickContainer"><div class="tachHalfTick"></div></div>
+  <div class="tachTickContainer"><div class="tachHalfTick"></div></div>
+  <div class="tachTickContainer"><div class="tachHalfTick"></div></div>
+  <div class="tachTickContainer"><div class="tachHalfTick redTick"></div></div>
+
+  <div class="tachTickContainer"><div class="tachTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTick redTick"></div></div>
+  <div class="tachTickContainer"><div class="tachTick redTick"></div></div>
+
+
+  <div class="boostTickContainer"><div class="boostTinyTick redTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick redTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTinyTick"></div></div>
+
+  <div class="boostTickContainer"><div class="boostHalfTick"></div></div>
+  <div class="boostTickContainer"><div class="boostHalfTick"></div></div>
+  <div class="boostTickContainer"><div class="boostHalfTick"></div></div>
+  <div class="boostTickContainer"><div class="boostHalfTick"></div></div>
+
+  <div class="boostTickContainer"><div class="boostTick redTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTick"></div></div>
+  <div class="boostTickContainer"><div class="boostTick"></div></div>
+
+
+
+  <div id="tachCentreBelowNeedle"></div>
+
+  <div id="tachCentre"></div>
+
+  <span class="tachNumber" id="tach_0">0</span>
+  <span class="tachNumber" id="tach_1">1</span>
+  <span class="tachNumber" id="tach_2">2</span>
+  <span class="tachNumber" id="tach_3">3</span>
+  <span class="tachNumber" id="tach_4">4</span>
+  <span class="tachNumber" id="tach_5">5</span>
+  <span class="tachNumber" id="tach_6">6</span>
+  <span class="tachNumber" id="tach_7">7</span>
+
+  <span class="boostNumber" id="boost_0">+1</span>
+  <span class="boostNumber" id="boost_1">0</span>
+  <span class="boostNumber" id="boost_2">-1</span>
+
+
+  <div id="tachOuterDark"></div>
+
+
+  <div id="tachNeedle">
+    <div id="tachNeedleActual"></div>
+    <div id="tachNeedleActualBase"></div>
+  </div>
+
+  <div id="boostNeedle">
+    <div id="boostNeedleActual"></div>
+    <div id="boostNeedleActualBase"></div>
+  </div>
+
+  <div id="boostMaxMarker">
+    <div id="boostMaxMarkerBase"></div>
+  </div>
+
+  <div id="tachOuter"></div>
+
+  <div id="mphLabel">mph</div>
+  <div id="mphValue">0</div>
+
+  <div id="gears">
+    <div id="gear_R" class="gear">R</div>
+    <div id="gear_N" class="gear">N</div>
+    <div id="gear_1" class="gear">1</div>
+    <div id="gear_2" class="gear">2</div>
+    <div id="gear_3" class="gear">3</div>
+    <div id="gear_4" class="gear">4</div>
+  </div>
+</div>
+
+
+<div id="leftDataPanel" class="mainDatapanel">
+
+  <div class="datapanel" id="mil">
+    <div class="valueLong" id="milValue">???</div>
+    <div class="label">MIL</div>
+  </div>
+
+  <div class="datapanel" id="battery">
+    <div class="value" id="batteryValue">???</div>
+    <div class="label">Battery</div>
+  </div>
+
+  <div class="datapanel" id="iat">
+    <div class="value" id="iatValue">???</div>
+    <div class="label">IAT</div>
+  </div>
+
+  <div class="datapanel" id="coolant">
+    <div class="value" id="coolantValue">???</div>
+    <div class="label">COOLANT</div>
+  </div>
+
+  <div class="datapanel" id="coolingFan1">
+    <div class="value" id="coolingFan1Value">???</div>
+    <div class="label">Fan 1</div>
+  </div>
+
+  <div class="datapanel" id="fuelPump">
+    <div class="value" id="fuelPumpValue">???</div>
+    <div class="label">Fuel pump</div>
+  </div>
+</div>
+
+
+
+<div id="rightDataPanel" class="mainDatapanel">
+  <div class="datapanel" id="afr">
+    <div class="value" id="afrValue">???</div>
+    <div class="label">AFR</div>
+  </div>
+
+  <div class="datapanel" id="targetAfr">
+    <div class="value" id="targetAfrValue">???</div>
+    <div class="label">AFR Target</div>
+  </div>
+
+  <div class="datapanel" id="map">
+    <div class="value" id="mapValue">???</div>
+    <div class="label">MAP mBar</div>
+  </div>
+
+  <div class="datapanel" id="baro">
+    <div class="value" id="baroValue">???</div>
+    <div class="label">Baro mBar</div>
+  </div>
+
+  <div class="datapanel" id="tps">
+    <div class="value" id="tpsValue">???</div>
+    <div class="label">TPS %</div>
+  </div>
+
+  <div class="datapanel" id="sparkAdv">
+    <div class="value" id="sparkAdvValue">???</div>
+    <div class="label">Spark Advance</div>
+  </div>
+
+</div>
+
+
+<div id="disconnected">Disconnected</div>
+
+<div style="position: fixed">
 <input type="button" onclick="connect()" value="Connect manually"><br/>
 <input type="button" onclick="writeserial()" value="Ask for data"><br/>
 <input type="button" onclick="testdata()" value="Parse test(fake) data"><br/>
+</div>
 
-<div id="output"></div>
-<pre id="log"></pre>
+<!-- <div id="mashTheButton" onclick="buttonMashed();"></div> -->
 
-<script type="text/javascript">
+<!-- <div id="hiddenButtons">
+  <div onclick="location.reload();">Refresh</div>
+  <div onclick='fetch("/gitpull");'>Git pull</div>
+  <div onclick='fetch("/exit");'>Exit (restart) server</div>
+  <div onclick='fetch("/reboot");'>Reboot</div>
+  <div onclick='fetch("/shutdown");'>Shut down</div>
+</div> -->
+<!--
+cranking fuel corr
+coolant fuel corr
+ait temp fuel corr
+target idle
 
-window.buffer = [];
-window.currentStatus = {};
-window.previousStatus = {};
-window.baudrate = 115200;
-window.writeTimer = undefined;
+closed loop control +/- ?
+-->
 
-var logDiv = document.getElementById("log");
-var outputDiv = document.getElementById("output");
+<!-- <div style="position: fixed;">
+<button type="button" onclick="setGear('R')">R</button>
+<button type="button" onclick="setGear('N')">N</button>
+<button type="button" onclick="setGear('1')">1</button>
+<button type="button" onclick="setGear('2')">2</button>
+<button type="button" onclick="setGear('3')">3</button>
+<button type="button" onclick="setGear('4')">4</button>
+<br/>
+<button type="button" onclick="setRpmNeedle('1000')">1000 RPM</button>
+<button type="button" onclick="setRpmNeedle('4000')">4000 RPM</button>
+<button type="button" onclick="setRpmNeedle('5600')">5600 RPM</button>
+<button type="button" onclick="setRpmNeedle('6500')">6500 RPM</button>
+<br/>
+<button type="button" onclick="setMapPressures('0')">1 bar vacuum</button>
+<button type="button" onclick="setMapPressures('1000')">atmos</button>
+<button type="button" onclick="setMapPressures('2000')">1 bar boost</button>
+<br/>
+<button type="button" onclick="setMph('0')">0 MPH</button>
+<button type="button" onclick="setMph('13')">13 MPH</button>
+<button type="button" onclick="setMph('120')">120 MPH</button>
+</div> -->
 
-if ("serial" in navigator) {
-  // log("The Serial API is supported.");
-} else {
-  log("The Serial API is NOT supported.");
-  log("enable this first")
-  log("chrome://flags#enable-experimental-web-platform-features")
+<script>
+
+
+
+function setSizes() {
+  // var dialSize = screen.height;
+  var dialSize = 460;
+  var radius = dialSize/2;
+  // var dialLeft = (screen.width / 2) - radius;
+  var dialLeft = (document.documentElement.clientWidth / 2) - radius;
+
+
+  // rpm
+  var tachNumFontSize = dialSize/8;
+
+  // boost
+  var boostNumFontSize = dialSize/20;
+
+
+  var rpmBar = document.getElementById("rpmBar");
+  rpmBar.style.top = dialSize;
+
+  var leftDataPanel = document.getElementById("leftDataPanel");
+  leftDataPanel.style.height = dialSize;
+  var rightDataPanel = document.getElementById("rightDataPanel");
+  rightDataPanel.style.height = dialSize;
+  rightDataPanel.style.right = 0;
+
+  var tach = document.getElementById("tach");
+  tach.style.height = dialSize;
+  tach.style.width = dialSize;
+  tach.style.left = dialLeft;
+
+  var tachOuter = document.getElementById("tachOuter");
+  tachOuter.style.height = dialSize;
+  tachOuter.style.width = dialSize;
+  // tachOuter.style.left = dialLeft;
+
+  var tachOuterDark = document.getElementById("tachOuterDark");
+  tachOuterDark.style.height = dialSize - 8;
+  tachOuterDark.style.width = dialSize - 8;
+  tachOuterDark.style.left = dialLeft + 4; // TODO
+  tachOuterDark.style.top = 4; // TODO
+
+  var tachTickContainers = document.getElementsByClassName("tachTickContainer");
+  for (var i=0; i<tachTickContainers.length; i++) {
+    tachTickContainers[i].style.height = dialSize;
+    tachTickContainers[i].style.width = dialSize;
+  }
+
+  var boostTickContainers = document.getElementsByClassName("boostTickContainer");
+  for (var i=0; i<boostTickContainers.length; i++) {
+    boostTickContainers[i].style.height = dialSize;
+    boostTickContainers[i].style.width = dialSize;
+  }
+
+  var mphLabel = document.getElementById("mphLabel");
+  mphLabel.style.width = dialSize;
+  mphLabel.style.top = dialSize * 0.3;
+  var mphValue = document.getElementById("mphValue");
+  mphValue.style.width = dialSize;
+  mphValue.style.top = dialSize * 0.37;
+
+  var gears = document.getElementById("gears");
+  gears.style.width = dialSize;
+  gears.style.top = dialSize * 0.6;
+  gears.style.height = dialSize * 0.1;
+
+  var tachNeedle = document.getElementById("tachNeedle");
+  tachNeedle.style.height = dialSize;
+  tachNeedle.style.width = dialSize;
+
+  var boostNeedle = document.getElementById("boostNeedle");
+  boostNeedle.style.height = dialSize;
+  boostNeedle.style.width = dialSize;
+
+  var boostMaxMarker = document.getElementById("boostMaxMarker");
+  boostMaxMarker.style.height = dialSize;
+  boostMaxMarker.style.width = dialSize;
+
+  var tachCentreBelowNeedle = document.getElementById("tachCentreBelowNeedle");
+  var tachCentreBelowNeedleScale = 0.6;
+  var tachCentreBelowNeedleOffset = 1 - tachCentreBelowNeedleScale;
+  tachCentreBelowNeedle.style.height = dialSize * tachCentreBelowNeedleScale;
+  tachCentreBelowNeedle.style.width = dialSize * tachCentreBelowNeedleScale;
+  tachCentreBelowNeedle.style.top = dialSize * tachCentreBelowNeedleOffset / 2;
+  tachCentreBelowNeedle.style.left = dialLeft + dialSize * tachCentreBelowNeedleOffset / 2;
+
+  var tachCentre = document.getElementById("tachCentre");
+  var tachCentreScale = 0.55;
+  var tachCentreOffset = 1 - tachCentreScale;
+  tachCentre.style.height = dialSize * tachCentreScale;
+  tachCentre.style.width = dialSize * tachCentreScale;
+  tachCentre.style.top = dialSize * tachCentreOffset / 2;
+  tachCentre.style.left = dialLeft + dialSize * tachCentreOffset / 2;
+
+
+
+  // set tach number sizes
+  var tachNumbers = document.getElementsByClassName("tachNumber");
+  for (var i=0; i<tachNumbers.length; i++) {
+    tachNumbers[i].style.fontSize = tachNumFontSize;
+  }
+
+  var numberShrink = 1; // how much to shrink the numbers radius vs dial outer
+  var numbersRadius = radius - (tachNumFontSize * numberShrink);
+  for (var i=0; i<=7; i++) {
+    var tach_i = document.getElementById("tach_"+i);
+    var angle = tachDialRotation + ((dialSpread / 7) * i);
+    var radians = angle * 0.0174532925;
+    var x = numbersRadius + (numbersRadius * Math.sin(radians));
+    var y = numbersRadius + (numbersRadius * -Math.cos(radians));
+    tach_i.style.left = dialLeft + x - (tachNumFontSize * 0.3) + (tachNumFontSize * numberShrink);
+    tach_i.style.top = y - (tachNumFontSize*0.6) + (tachNumFontSize * numberShrink);
+  }
+
+
+  // set tach ticks up
+  var tachTicks = document.getElementsByClassName("tachTick");
+  for (var i=0; i<=7; i++) {
+    var angle = tachDialRotation + ((dialSpread / 7) * i);
+    tachTicks[i].parentElement.style.transform = "rotate("+angle+"deg)";
+  }
+
+  // set half ticks
+  var tachHalfTicks = document.getElementsByClassName("tachHalfTick");
+  for (var i=0; i<=6; i++) {
+    var angle = tachDialRotation + ((dialSpread / 7) / 2) + ((dialSpread / 7) * i);
+    tachHalfTicks[i].parentElement.style.transform = "rotate("+angle+"deg)";
+  }
+
+  // set tiny ticks
+  var tachTinyTicks = document.getElementsByClassName("tachTinyTick");
+  for (var i=0; i<tachTinyTicks.length; i++) {
+    var angle = tachDialRotation + ((dialSpread / 7) / 10) + ((dialSpread / 7 / 10) * i);
+    tachTinyTicks[i].parentElement.style.transform = "rotate("+angle+"deg)";
+  }
+
+
+
+  // boost ticks
+  var boostTicks = document.getElementsByClassName("boostTick");
+  for (var i=0; i<boostTicks.length; i++) {
+    var angle = boostDialRotation + ((boostDialSpread / 2) * i);
+    boostTicks[i].parentElement.style.transform = "rotate("+angle+"deg)";
+  }
+
+  // boost half ticks
+  var boostHalfTicks = document.getElementsByClassName("boostHalfTick");
+  for (var i=0; i<boostHalfTicks.length; i++) {
+    var angle = boostDialRotation + (boostDialSpread / 2 / 2) + ((boostDialSpread / 2 / 2) * i);
+    boostHalfTicks[i].parentElement.style.transform = "rotate("+angle+"deg)";
+  }
+
+  // boost tiny ticks
+  var boostTinyTicks = document.getElementsByClassName("boostTinyTick");
+  for (var i=0; i<boostTinyTicks.length; i++) {
+    var angle = boostDialRotation + (boostDialSpread / 2 / 10) + ((boostDialSpread / 2 / 10) * i);
+    boostTinyTicks[i].parentElement.style.transform = "rotate("+angle+"deg)";
+  }
+
+
+  // set tach number sizes
+  var boostNumbers = document.getElementsByClassName("boostNumber");
+  for (var i=0; i<boostNumbers.length; i++) {
+    boostNumbers[i].style.fontSize = boostNumFontSize;
+  }
+
+  var boostNumberShrink = 2.2; // how much to shrink the numbers radius vs dial outer
+  var boostNumbersRadius = radius - (boostNumFontSize * boostNumberShrink);
+  for (var i=0; i<=2; i++) {
+    var boost_i = document.getElementById("boost_"+i);
+    var angle = boostDialRotation + ((boostDialSpread / 2) * i);
+    var radians = angle * 0.0174532925;
+    var x = boostNumbersRadius + (boostNumbersRadius * Math.sin(radians));
+    var y = boostNumbersRadius + (boostNumbersRadius * -Math.cos(radians));
+    boost_i.style.left = dialLeft + x - (boostNumFontSize * 0.3) + (boostNumFontSize * boostNumberShrink);
+    boost_i.style.top = y - (boostNumFontSize*0.6) + (boostNumFontSize * boostNumberShrink);
+  }
 }
-autoConnect();
 
 
-// set up write timer to keep polling for data
-function setWriteTimer(timeout) {
-  if (timeout == undefined) { timeout = 1000; }
-  if (window.writeTimer != undefined) { clearTimeout(window.writeTimer); }
-  window.writeTimer = setTimeout(function() { writeserial(); }, timeout);
-}
 
-
-async function autoConnect() {
-  // get previously granted ports
-  const ports = await navigator.serial.getPorts();
-  if (ports.length == 1) {
-    log("Found 1 port which was previously granted access, trying to auto reconnect");
-    window.port = ports[0];
-    await port.open({ baudRate: window.baudrate, baudrate: window.baudrate }); // twice due to change in recent chrome version
-    readloop();
-    setWriteTimer();
-  } else if (ports.length > 1) {
-    log("More than 1 port previously granted access, don't know which to use.");
+function setRpmNeedle(rpm) {
+  var mainbg = document.getElementById("pidisplayBorder");
+  if (rpm > 6000) {
+    mainbg.classList.remove("flashingYellow");
+    mainbg.classList.add("flashingRed");
+  } else if (rpm > 5500) {
+    mainbg.classList.remove("flashingRed");
+    mainbg.classList.add("flashingYellow");
   } else {
-    log("No ports which are already granted, can't auto connect");
+    mainbg.className = "";
+  }
+
+  var tachNeedle = document.getElementById("tachNeedle");
+
+  var needleOffset = tachDialRotation - 180;
+
+  var oldRotate = (dialSpread / 7) * (window.rpm / 1000); // get current position/rotation
+  oldRotate += needleOffset;
+
+  var rotate = (dialSpread / 7) * (rpm / 1000);
+  if (rotate > dialSpread) { rotate = dialSpread; }
+  rotate += needleOffset;
+
+  tachNeedle.style.transform = "rotate("+rotate+"deg)";
+
+  window.rpm = rpm;
+
+
+  // rpm bar - do percentage as from 4000-7000 RPM
+  // so 3000 rpm range
+  var rpmBlock = document.getElementById("rpmBlock");
+  // var rpmProgress = rpm - 4000;
+  // if (rpmProgress <= 0) {
+  //   rpmBlock.style.marginLeft = "0%";
+  // } else {
+    var percent = rpm / 7000 * 100;
+    rpmBlock.style.marginLeft = percent+"%";
+  // }
+}
+
+window.maxBoost = 0;
+
+function setBoostNeedle(absolutePressure) {
+  // boostDialSpread (90 degrees)
+  // 45 degrees for 1000 +/-
+  var multi = (boostDialSpread/2)/1000;
+
+  // cap at 1 bar boost for now (2 bar absolute)
+  if (absolutePressure > 2000) { absolutePressure = 2000; }
+
+  var boostNeedle = document.getElementById("boostNeedle");
+
+  // turn into negative for vacuum, positive for boost
+  var pressure = absolutePressure - 1000;
+  // reverse the sign since this gauge is moving backwards to rotate function
+  pressure = 0 - pressure;
+
+  var rotate = pressure * multi;
+  rotate += boostDialRotation * 2;
+
+
+  boostNeedle.style.transform = "rotate("+rotate+"deg)";
+
+  if (absolutePressure > window.maxBoost) {
+    window.maxBoost = absolutePressure;
+
+    var boostMaxMarker = document.getElementById("boostMaxMarker");
+    boostMaxMarker.style.transform = "rotate("+rotate+"deg)";
   }
 }
 
 
-function log(message) {
-    logDiv.innerText = message + "\n" + logDiv.innerText;
+function setMph(speed) {
+  var mphValue = document.getElementById("mphValue");
+  mphValue.innerHTML = speed;
 }
 
-
-async function connect() {
-  // optional filter down to arduino mega, or whatever,
-  // at least in linux it hides all the ttys
-  const filters = [
-    { usbVendorId: 0x2341, usbProductId: 0x0042 } // arduino mega
-  ];
-  window.port = await navigator.serial.requestPort({ filters });
-  await port.open({ baudRate: window.baudrate, baudrate: window.baudrate }); // twice due to change in recent chrome version
-  readloop();
-  setWriteTimer();
+function updateOutput_vss(speed) {
+  setMph(speed); // what is the raw vss reading?
 }
 
-
-async function writeserial() {
-  setWriteTimer(5000); // set timer for 5 seconds in case this fails or parsing fails
-  // console.log("in writeserial");
-  const writer = port.writable.getWriter();
-  const data = new Uint8Array([0x41]); // "A" - requests live data packet
-  await writer.write(data);
-  writer.releaseLock(); // Allow the serial port to be closed later.
-}
-
-
-async function readloop() {
-  const reader = port.readable.getReader();
-  while (true) {
-    const { value, done } = await reader.read();
-    if (done) {
-      reader.releaseLock();
-      break;
-    }
-    // console.log(value);
-    for (i=0; i<value.length; i++) {
-      window.buffer.push(value[i]);
-    }
-    parseBuffer();
+function updateOutput_gear(gear) {
+  if (gear == 255) {
+    gear = "R";
+  } else if (gear == 0) {
+    gear = "N";
   }
-  await reader.cancel(); // Force reader.read() to resolve immediately and subsequently call reader.releaseLock() in the loop example above.
-  await port.close();
-}
-
-function parseBuffer() {
-  if (window.buffer.length < 117) {
-    // log("need more data");
-    return;
-  } else if (window.buffer.length > 117) {
-    log("got too much data");
-    window.buffer = [];
-    return;
+  var activeGear = document.getElementsByClassName("activegear");
+  for (var i=0; i<activeGear.length; i++) {
+    activeGear[i].classList.remove("activegear");
   }
-  // log("got the right amount of data, going to parse it");
-
-  // previousStatus = currentStatus; // causes a pointer copy, don't use this, do the following full copy
-  for (var i in currentStatus) { previousStatus[i] = currentStatus[i]; }
-
-  currentStatus.secl = window.buffer[0]; //secl is simply a counter that increments each second. Used to track unexpected resets (Which will reset this count to 0)
-  currentStatus.status1 = window.buffer[1]; //status1 Bitfield
-  currentStatus.engine = window.buffer[2]; //Engine Status Bitfield
-  currentStatus.syncLossCounter = window.buffer[3];
-
-  currentStatus.map = (window.buffer[5] << 8) + window.buffer[4];
-
-  currentStatus.iat = window.buffer[6]; //mat
-  currentStatus.coolant = window.buffer[7]; //Coolant ADC
-  currentStatus.batCorrection = window.buffer[8]; //Battery voltage correction (%)
-  currentStatus.battery = window.buffer[9]; //battery voltage (was currentStatus.battery10)
-  currentStatus.o2 = window.buffer[10]; //O2
-  currentStatus.egoCorrection = window.buffer[11]; //Exhaust gas correction (%)
-  currentStatus.iatCorrection = window.buffer[12]; //Air temperature Correction (%)
-  currentStatus.wueCorrection = window.buffer[13]; //Warmup enrichment (%)
-
-  currentStatus.rpm = (window.buffer[15] << 8) + window.buffer[14];
-
-  currentStatus.aeamount = window.buffer[16] << 1; //TPS acceleration enrichment (%) divided by 2 (Can exceed 255) (was (byte)(currentStatus.AEamount >> 1))
-
-  currentStatus.corrections = (window.buffer[18] << 8) + window.buffer[17]; //Total GammaE (%)
-
-  currentStatus.ve1 = window.buffer[19]; //VE 1 (%)
-  currentStatus.ve2 = window.buffer[20]; //VE 2 (%)
-  currentStatus.afrTarget = window.buffer[21];
-  currentStatus.tpsDOT = window.buffer[22]; //TPS DOT
-  currentStatus.advance = window.buffer[23];
-  currentStatus.tps = window.buffer[24]; // TPS (0% to 100%)
-
-  currentStatus.loopsPerSecond = (window.buffer[26] << 8) + window.buffer[25]
-
-  currentStatus.freeRAM = (window.buffer[28] << 8) + window.buffer[27];
-
-  currentStatus.boostTarget = window.buffer[29] << 1; // = (byte)(currentStatus.boostTarget >> 1); //Divide boost target by 2 to fit in a byte
-  currentStatus.boostDuty = window.buffer[30]; // = (byte)(currentStatus.boostDuty / 100);
-
-  currentStatus.spark = window.buffer[31]; //Spark related bitfield
-
-  currentStatus.rpmDOT = (window.buffer[33] << 8) + window.buffer[32]; // original comment: //rpmDOT must be sent as a signed integer
-
-  currentStatus.ethanolPct = window.buffer[34]; //Flex sensor value (or 0 if not used)
-  currentStatus.flexCorrection = window.buffer[35]; //Flex fuel correction (% above or below 100)
-  currentStatus.flexIgnCorrection = window.buffer[36]; //Ignition correction (Increased degrees of advance) for flex fuel
-  currentStatus.idleLoad = window.buffer[37];
-  currentStatus.testOutputs = window.buffer[38];
-  currentStatus.o2_2 = window.buffer[39]; //O2
-  currentStatus.baro = window.buffer[40]; //Barometer value
-
-  currentStatus.canin = [];
-  currentStatus.canin[0] = (window.buffer[42] << 8) + window.buffer[41];
-  currentStatus.canin[1] = (window.buffer[44] << 8) + window.buffer[43];
-  currentStatus.canin[2] = (window.buffer[46] << 8) + window.buffer[45];
-  currentStatus.canin[3] = (window.buffer[48] << 8) + window.buffer[47];
-  currentStatus.canin[4] = (window.buffer[50] << 8) + window.buffer[49];
-  currentStatus.canin[5] = (window.buffer[52] << 8) + window.buffer[51];
-  currentStatus.canin[6] = (window.buffer[54] << 8) + window.buffer[53];
-  currentStatus.canin[7] = (window.buffer[56] << 8) + window.buffer[55];
-  currentStatus.canin[8] = (window.buffer[58] << 8) + window.buffer[57];
-  currentStatus.canin[9] = (window.buffer[60] << 8) + window.buffer[59];
-  currentStatus.canin[10] = (window.buffer[62] << 8) + window.buffer[61];
-  currentStatus.canin[11] = (window.buffer[64] << 8) + window.buffer[63];
-  currentStatus.canin[12] = (window.buffer[66] << 8) + window.buffer[65];
-  currentStatus.canin[13] = (window.buffer[68] << 8) + window.buffer[67];
-  currentStatus.canin[14] = (window.buffer[70] << 8) + window.buffer[69];
-  currentStatus.canin[15] = (window.buffer[72] << 8) + window.buffer[71];
-
-  currentStatus.tpsADC = window.buffer[73];
-  currentStatus.getNextError = window.buffer[74]; // = getNextError();
-  currentStatus.pw1 = (window.buffer[76] << 8) + window.buffer[75]; //Pulsewidth 1 multiplied by 10 in ms. Have to convert from uS to mS.
-  currentStatus.pw2 = (window.buffer[78] << 8) + window.buffer[77]; //Pulsewidth 2 multiplied by 10 in ms. Have to convert from uS to mS.
-  currentStatus.pw3 = (window.buffer[80] << 8) + window.buffer[79]; //Pulsewidth 3 multiplied by 10 in ms. Have to convert from uS to mS.
-  currentStatus.pw4 = (window.buffer[82] << 8) + window.buffer[81]; //Pulsewidth 4 multiplied by 10 in ms. Have to convert from uS to mS.
-  currentStatus.status3 = window.buffer[83];
-  currentStatus.engineProtectStatus = window.buffer[84];
-  currentStatus.fuelLoad = (window.buffer[86] << 8) + window.buffer[85];
-  currentStatus.ignLoad = (window.buffer[88] << 8) + window.buffer[87];
-  currentStatus.dwell = (window.buffer[90] << 8) + window.buffer[89];
-  currentStatus.cliIdleTarget = window.buffer[91];
-  currentStatus.mapDOT = window.buffer[92];
-  currentStatus.vvt1Angle = window.buffer[93];
-  currentStatus.vvt1TargetAngle = window.buffer[94];
-  currentStatus.vvt1Duty = window.buffer[95];
-  currentStatus.flexBoostCorrection = (window.buffer[97] << 8) + window.buffer[96];
-  currentStatus.baroCorrection = window.buffer[98];
-  currentStatus.ve = window.buffer[99]; //Current VE (%). Can be equal to VE1 or VE2 or a calculated value from both of them
-  currentStatus.aseValue = window.buffer[100]; //Current ASE (%)
-  currentStatus.vss = (window.buffer[102] << 8) + window.buffer[101];
-  currentStatus.gear = window.buffer[103];
-  currentStatus.fuelPressure = window.buffer[104];
-  currentStatus.oilPressure = window.buffer[105];
-  currentStatus.wmiPW = window.buffer[106];
-  currentStatus.wmiEmpty = window.buffer[107];
-  currentStatus.vvt2Angle = window.buffer[108];
-  currentStatus.vvt2TargetAngle = window.buffer[109];
-  currentStatus.vvt2Duty = window.buffer[110];
-  currentStatus.outputsStatus = window.buffer[111];
-  currentStatus.fuelTemp = window.buffer[112]; //Fuel temperature from flex sensor
-  currentStatus.fuelTempCorrection = window.buffer[113]; //Fuel temperature Correction (%)
-  currentStatus.advance1 = window.buffer[114]; //advance 1 (%)
-  currentStatus.advance2 = window.buffer[115]; //advance 2 (%)
-  // window.buffer[116] = 0; //Currently unused
-
-  // console.log(currentStatus);
-  window.buffer = [];
-
-  updateOutputsRawText();
-  updateOutputsCustom();
-
-  setWriteTimer(100); // drop the previous 5 seconds timer to this
-  // console.log("parsed");
+  var gearSpan = document.getElementById("gear_"+gear);
+  gearSpan.classList.add("activegear");
 }
 
-function updateOutputsCustom() {
-  for (key in currentStatus) {
-    if (previousStatus[key] === currentStatus[key]) {
-      continue;
-    }
-    // dynamic method call for each data item
-    // e.g. for currentStatus.rpm it will try to call updateOutput_rpm();
-    if (window["updateOutput_"+key] != undefined) {
-      window["updateOutput_"+key]();
-    }
+function updateOutput_coolant(temp) {
+  var div = document.getElementById("coolant");
+  if (temp > 95) {
+    div.classList.add("alarm");
+    div.classList.remove("blue");
+  } else if (temp < 80) {
+    div.classList.add("blue");
+    div.classList.remove("alarm");
+  } else {
+    div.classList.remove("alarm");
+    div.classList.remove("blue");
+  }
+
+  var coolantValue = document.getElementById("coolantValue");
+  coolantValue.innerHTML = temp;
+}
+
+function setMil(faulty) {
+  var milDiv = document.getElementById("mil");
+  var milValue = document.getElementById("milValue");
+  if (faulty) {
+    milDiv.classList.add("alarm");
+    milValue.innerHTML ="FAULT";
+  } else {
+    milDiv.classList.remove("alarm");
+    milValue.innerHTML ="OK";
   }
 }
 
-function updateOutputsRawText() {
-  for (key in currentStatus) {
-    if (previousStatus[key] === currentStatus[key]) {
-      continue;
-    }
-    thisOutputDiv = document.getElementById("output_"+key);
-    if (thisOutputDiv == undefined) {
-      thisOutputDiv = document.createElement("div");
-      thisOutputDiv.id = "output_"+key;
-      outputDiv.appendChild(thisOutputDiv);
-    }
-    thisOutputDiv.innerText = key + " " + currentStatus[key];
+function updateOutput_battery(voltage) {
+  var div = document.getElementById("battery");
+  var valueDiv = document.getElementById("batteryValue");
+  valueDiv.innerHTML = voltage;
+
+  if (voltage < 13.2) {
+    div.classList.add("alarm");
+  } else {
+    div.classList.remove("alarm");
   }
 }
 
-function updateOutput_rpm() {
-  console.log("updateOutput_rpm called");
-  // e.g. update RPM gauge needle here
+function setFan1On(on) {
+  var div = document.getElementById("coolingFan1");
+  var valueDiv = document.getElementById("coolingFan1Value");
+
+  if (on) {
+    valueDiv.innerHTML = "ON";
+  } else {
+    valueDiv.innerHTML = "OFF";
+  }
 }
 
-function testdata() {
-  // 117 bytes like the speeduinos return
-  window.buffer = [
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0
-  ];
-  parseBuffer();
+function setFuelPumpOn(on) {
+  var div = document.getElementById("fuelPump");
+  var valueDiv = document.getElementById("fuelPumpValue");
+
+  if (on) {
+    div.classList.remove("alarm");
+    valueDiv.innerHTML = "ON";
+  } else {
+    div.classList.add("alarm");
+    valueDiv.innerHTML = "OFF";
+  }
 }
+
+function setAfr(afr) {
+  var div = document.getElementById("afr");
+  var valueDiv = document.getElementById("afrValue");
+
+  valueDiv.innerHTML = afr;
+  if (afr < 13) {
+    // div.style.backgroundColor = "green";
+    // div.style.color = "white";
+    div.style.color = "lime";
+  } else if (afr < 15) {
+    // div.style.backgroundColor = "yellow";
+    // div.style.color = "black";
+    div.style.color = "yellow";
+  } else {
+    // div.style.backgroundColor = "red";
+    // div.style.color = "white";
+    div.style.color = "red";
+  }
+}
+
+function setMap(map) {
+  var div = document.getElementById("map");
+  var valueDiv = document.getElementById("mapValue");
+
+  valueDiv.innerHTML = map;
+}
+
+function updateOutput_map(map) {
+  setBoostNeedle(map);
+  setMap(map);
+}
+
+function updateOutput_afrTarget(afr) {
+  var div = document.getElementById("targetAfr");
+  var valueDiv = document.getElementById("targetAfrValue");
+  valueDiv.innerHTML = afr;
+}
+
+function updateOutput_baro(map) {
+  var div = document.getElementById("baro");
+  var valueDiv = document.getElementById("baroValue");
+  valueDiv.innerHTML = map;
+}
+
+function updateOutput_tps(percent) {
+  var div = document.getElementById("tps");
+  var valueDiv = document.getElementById("tpsValue");
+  valueDiv.innerHTML = percent;
+}
+
+function updateOutput_advance(advance) {
+  var div = document.getElementById("sparkAdv");
+  var valueDiv = document.getElementById("sparkAdvValue");
+  valueDiv.innerHTML = advance;
+}
+
+function updateOutput_iat(value) {
+  var div = document.getElementById("iat");
+  var valueDiv = document.getElementById("iatValue");
+  valueDiv.innerHTML = value;
+}
+
+// basically user pressed the screen
+// function buttonMashed() {
+//   var divs = document.getElementsByClassName("mainDatapanel");
+//   var hiddenButtons = document.getElementById("hiddenButtons");
+//   for (var i=0; i<divs.length; i++) {
+//     if (divs[i].style.display == "none") {
+//       divs[i].style.display = "block";
+//       hiddenButtons.style.display = "none";
+//     } else {
+//       divs[i].style.display = "none";
+//       hiddenButtons.style.display = "block";
+//     }
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var tachDialRotation = 180;
+var dialSpread = 180;
+var boostDialSpread = 90;
+var boostDialRotation = 90 - (boostDialSpread/2);
+
+window.rpm = 0; // initial RPM
+window.lastSeen = {}; // tracking previous values to save UI updates
+
+
+window.addEventListener("resize", setSizes);
+setSizes();
+
+setBoostNeedle(1000);
+setRpmNeedle(0);
+
+
+
+
+
+
+
+
+
+window.counter = 0;
+window.parsedCounter = 0;
+
+window.messageDelay = 20; // how long to sleep for next message request
+
+
+var lastWindowCounter = 0;
+
+
+
+// keep track of connection by the last time the ecu sent data
+// this is assuming we can talk to the server
+window.lastEcuDataReceived = 0;
+window.lastEcuDataReceivedTimeout = 1;
+setInterval(function(){
+  var now = (Date.now() / 1000);
+  if (now > window.lastEcuDataReceived+window.lastEcuDataReceivedTimeout) {
+    setConnected(false);
+  } else {
+    setConnected(true);
+  }
+}, 1000 );
+
+
+window.lastConnectionState = false;
+
+function setConnected(connected) {
+  // don't constantly poke the UI
+  if (connected == window.lastConnectionState) { return; }
+  else { window.lastConnectionState = connected; }
+
+  var disconnectedDiv = document.getElementById("disconnected");
+  if (connected) {
+    disconnectedDiv.style.display = "none";
+  } else {
+    disconnectedDiv.style.display = "block";
+  }
+}
+
 
 </script>
+
+<div id="output"></div>
+<script type="text/javascript" src="serial.js"></script>
+
+</body>
+</html>
