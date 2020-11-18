@@ -13,6 +13,7 @@ window.buffer = [];
 window.currentStatus = {};
 window.previousStatus = {};
 window.baudrate = 115200;
+window.writeTimer = undefined;
 
 var logDiv = document.getElementById("log");
 var outputDiv = document.getElementById("output");
@@ -27,6 +28,14 @@ if ("serial" in navigator) {
 autoConnect();
 
 
+// set up write timer to keep polling for data
+function setWriteTimer(timeout) {
+  if (timeout == undefined) { timeout = 1000; }
+  if (window.writeTimer != undefined) { clearTimeout(window.writeTimer); }
+  window.writeTimer = setTimeout(function() { writeserial(); }, timeout);
+}
+
+
 async function autoConnect() {
   // get previously granted ports
   const ports = await navigator.serial.getPorts();
@@ -35,6 +44,7 @@ async function autoConnect() {
     window.port = ports[0];
     await port.open({ baudRate: window.baudrate, baudrate: window.baudrate }); // twice due to change in recent chrome version
     readloop();
+    setWriteTimer();
   } else if (ports.length > 1) {
     log("More than 1 port previously granted access, don't know which to use.");
   } else {
@@ -57,10 +67,13 @@ async function connect() {
   window.port = await navigator.serial.requestPort({ filters });
   await port.open({ baudRate: window.baudrate, baudrate: window.baudrate }); // twice due to change in recent chrome version
   readloop();
+  setWriteTimer();
 }
 
 
 async function writeserial() {
+  setWriteTimer(5000); // set timer for 5 seconds in case this fails or parsing fails
+  // console.log("in writeserial");
   const writer = port.writable.getWriter();
   const data = new Uint8Array([0x41]); // "A" - requests live data packet
   await writer.write(data);
@@ -88,14 +101,14 @@ async function readloop() {
 
 function parseBuffer() {
   if (window.buffer.length < 117) {
-    log("need more data");
+    // log("need more data");
     return;
   } else if (window.buffer.length > 117) {
     log("got too much data");
     window.buffer = [];
     return;
   }
-  log("got the right amount of data, going to parse it");
+  // log("got the right amount of data, going to parse it");
 
   // previousStatus = currentStatus; // causes a pointer copy, don't use this, do the following full copy
   for (var i in currentStatus) { previousStatus[i] = currentStatus[i]; }
@@ -118,7 +131,7 @@ function parseBuffer() {
 
   currentStatus.rpm = (window.buffer[15] << 8) + window.buffer[14];
 
-  currentStatus.AEamount = window.buffer[16] << 1; //TPS acceleration enrichment (%) divided by 2 (Can exceed 255) (was (byte)(currentStatus.AEamount >> 1))
+  currentStatus.aeamount = window.buffer[16] << 1; //TPS acceleration enrichment (%) divided by 2 (Can exceed 255) (was (byte)(currentStatus.AEamount >> 1))
 
   currentStatus.corrections = (window.buffer[18] << 8) + window.buffer[17]; //Total GammaE (%)
 
@@ -177,15 +190,15 @@ function parseBuffer() {
   currentStatus.fuelLoad = (window.buffer[86] << 8) + window.buffer[85];
   currentStatus.ignLoad = (window.buffer[88] << 8) + window.buffer[87];
   currentStatus.dwell = (window.buffer[90] << 8) + window.buffer[89];
-  currentStatus.CLIdleTarget = window.buffer[91];
+  currentStatus.cliIdleTarget = window.buffer[91];
   currentStatus.mapDOT = window.buffer[92];
   currentStatus.vvt1Angle = window.buffer[93];
   currentStatus.vvt1TargetAngle = window.buffer[94];
   currentStatus.vvt1Duty = window.buffer[95];
   currentStatus.flexBoostCorrection = (window.buffer[97] << 8) + window.buffer[96];
   currentStatus.baroCorrection = window.buffer[98];
-  currentStatus.VE = window.buffer[99]; //Current VE (%). Can be equal to VE1 or VE2 or a calculated value from both of them
-  currentStatus.ASEValue = window.buffer[100]; //Current ASE (%)
+  currentStatus.ve = window.buffer[99]; //Current VE (%). Can be equal to VE1 or VE2 or a calculated value from both of them
+  currentStatus.aseValue = window.buffer[100]; //Current ASE (%)
   currentStatus.vss = (window.buffer[102] << 8) + window.buffer[101];
   currentStatus.gear = window.buffer[103];
   currentStatus.fuelPressure = window.buffer[104];
@@ -207,6 +220,9 @@ function parseBuffer() {
 
   updateOutputsRawText();
   updateOutputsCustom();
+
+  setWriteTimer(100); // drop the previous 5 seconds timer to this
+  // console.log("parsed");
 }
 
 function updateOutputsCustom() {
