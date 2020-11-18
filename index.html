@@ -31,6 +31,7 @@ async function autoConnect() {
   // get previously granted ports
   const ports = await navigator.serial.getPorts();
   if (ports.length == 1) {
+    log("Found 1 port which was previously granted access, trying to auto reconnect");
     window.port = ports[0];
     await port.open({ baudRate: window.baudrate, baudrate: window.baudrate }); // twice due to change in recent chrome version
     readloop();
@@ -75,8 +76,9 @@ async function readloop() {
       reader.releaseLock();
       break;
     }
-    for (thing in value) {
-      window.buffer.push(thing);
+    // console.log(value);
+    for (i=0; i<value.length; i++) {
+      window.buffer.push(value[i]);
     }
     parseBuffer();
   }
@@ -103,7 +105,7 @@ function parseBuffer() {
   currentStatus.engine = window.buffer[2]; //Engine Status Bitfield
   currentStatus.syncLossCounter = window.buffer[3];
 
-  currentStatus.map = (window.buffer[4] << 8) + window.buffer[5];
+  currentStatus.map = (window.buffer[5] << 8) + window.buffer[4];
 
   currentStatus.iat = window.buffer[6]; //mat
   currentStatus.coolant = window.buffer[7]; //Coolant ADC
@@ -114,11 +116,11 @@ function parseBuffer() {
   currentStatus.iatCorrection = window.buffer[12]; //Air temperature Correction (%)
   currentStatus.wueCorrection = window.buffer[13]; //Warmup enrichment (%)
 
-  currentStatus.rpm = (window.buffer[14] << 8) + window.buffer[15];
+  currentStatus.rpm = (window.buffer[15] << 8) + window.buffer[14];
 
   currentStatus.AEamount = window.buffer[16] << 1; //TPS acceleration enrichment (%) divided by 2 (Can exceed 255) (was (byte)(currentStatus.AEamount >> 1))
 
-  currentStatus.corrections = (window.buffer[17] << 8) + window.buffer[18]; //Total GammaE (%)
+  currentStatus.corrections = (window.buffer[18] << 8) + window.buffer[17]; //Total GammaE (%)
 
   currentStatus.ve1 = window.buffer[19]; //VE 1 (%)
   currentStatus.ve2 = window.buffer[20]; //VE 2 (%)
@@ -127,16 +129,16 @@ function parseBuffer() {
   currentStatus.advance = window.buffer[23];
   currentStatus.tps = window.buffer[24]; // TPS (0% to 100%)
 
-  currentStatus.loopsPerSecond = (window.buffer[25] << 8) + window.buffer[26]
+  currentStatus.loopsPerSecond = (window.buffer[26] << 8) + window.buffer[25]
 
-  currentStatus.freeRAM = (window.buffer[27] << 8) + window.buffer[28];
+  currentStatus.freeRAM = (window.buffer[28] << 8) + window.buffer[27];
 
   currentStatus.boostTarget = window.buffer[29] << 1; // = (byte)(currentStatus.boostTarget >> 1); //Divide boost target by 2 to fit in a byte
   currentStatus.boostDuty = window.buffer[30]; // = (byte)(currentStatus.boostDuty / 100);
 
   currentStatus.spark = window.buffer[31]; //Spark related bitfield
 
-  currentStatus.rpmDOT = (window.buffer[32] << 8) + window.buffer[33]; // original comment: //rpmDOT must be sent as a signed integer
+  currentStatus.rpmDOT = (window.buffer[33] << 8) + window.buffer[32]; // original comment: //rpmDOT must be sent as a signed integer
 
   currentStatus.ethanolPct = window.buffer[34]; //Flex sensor value (or 0 if not used)
   currentStatus.flexCorrection = window.buffer[35]; //Flex fuel correction (% above or below 100)
@@ -147,44 +149,44 @@ function parseBuffer() {
   currentStatus.baro = window.buffer[40]; //Barometer value
 
   currentStatus.canin = [];
-  currentStatus.canin[0] = (window.buffer[41] << 8) + window.buffer[42];
-  currentStatus.canin[1] = (window.buffer[43] << 8) + window.buffer[44];
-  currentStatus.canin[2] = (window.buffer[45] << 8) + window.buffer[46];
-  currentStatus.canin[3] = (window.buffer[47] << 8) + window.buffer[48];
-  currentStatus.canin[4] = (window.buffer[49] << 8) + window.buffer[50];
-  currentStatus.canin[5] = (window.buffer[51] << 8) + window.buffer[52];
-  currentStatus.canin[6] = (window.buffer[53] << 8) + window.buffer[54];
-  currentStatus.canin[7] = (window.buffer[55] << 8) + window.buffer[56];
-  currentStatus.canin[8] = (window.buffer[57] << 8) + window.buffer[58];
-  currentStatus.canin[9] = (window.buffer[59] << 8) + window.buffer[60];
-  currentStatus.canin[10] = (window.buffer[61] << 8) + window.buffer[62];
-  currentStatus.canin[11] = (window.buffer[63] << 8) + window.buffer[64];
-  currentStatus.canin[12] = (window.buffer[65] << 8) + window.buffer[66];
-  currentStatus.canin[13] = (window.buffer[67] << 8) + window.buffer[68];
-  currentStatus.canin[14] = (window.buffer[69] << 8) + window.buffer[70];
-  currentStatus.canin[15] = (window.buffer[71] << 8) + window.buffer[72];
+  currentStatus.canin[0] = (window.buffer[42] << 8) + window.buffer[41];
+  currentStatus.canin[1] = (window.buffer[44] << 8) + window.buffer[43];
+  currentStatus.canin[2] = (window.buffer[46] << 8) + window.buffer[45];
+  currentStatus.canin[3] = (window.buffer[48] << 8) + window.buffer[47];
+  currentStatus.canin[4] = (window.buffer[50] << 8) + window.buffer[49];
+  currentStatus.canin[5] = (window.buffer[52] << 8) + window.buffer[51];
+  currentStatus.canin[6] = (window.buffer[54] << 8) + window.buffer[53];
+  currentStatus.canin[7] = (window.buffer[56] << 8) + window.buffer[55];
+  currentStatus.canin[8] = (window.buffer[58] << 8) + window.buffer[57];
+  currentStatus.canin[9] = (window.buffer[60] << 8) + window.buffer[59];
+  currentStatus.canin[10] = (window.buffer[62] << 8) + window.buffer[61];
+  currentStatus.canin[11] = (window.buffer[64] << 8) + window.buffer[63];
+  currentStatus.canin[12] = (window.buffer[66] << 8) + window.buffer[65];
+  currentStatus.canin[13] = (window.buffer[68] << 8) + window.buffer[67];
+  currentStatus.canin[14] = (window.buffer[70] << 8) + window.buffer[69];
+  currentStatus.canin[15] = (window.buffer[72] << 8) + window.buffer[71];
 
   currentStatus.tpsADC = window.buffer[73];
   currentStatus.getNextError = window.buffer[74]; // = getNextError();
-  currentStatus.pw1 = (window.buffer[75] << 8) + window.buffer[76]; //Pulsewidth 1 multiplied by 10 in ms. Have to convert from uS to mS.
-  currentStatus.pw2 = (window.buffer[77] << 8) + window.buffer[78]; //Pulsewidth 2 multiplied by 10 in ms. Have to convert from uS to mS.
-  currentStatus.pw3 = (window.buffer[79] << 8) + window.buffer[80]; //Pulsewidth 3 multiplied by 10 in ms. Have to convert from uS to mS.
-  currentStatus.pw4 = (window.buffer[81] << 8) + window.buffer[82]; //Pulsewidth 4 multiplied by 10 in ms. Have to convert from uS to mS.
+  currentStatus.pw1 = (window.buffer[76] << 8) + window.buffer[75]; //Pulsewidth 1 multiplied by 10 in ms. Have to convert from uS to mS.
+  currentStatus.pw2 = (window.buffer[78] << 8) + window.buffer[77]; //Pulsewidth 2 multiplied by 10 in ms. Have to convert from uS to mS.
+  currentStatus.pw3 = (window.buffer[80] << 8) + window.buffer[79]; //Pulsewidth 3 multiplied by 10 in ms. Have to convert from uS to mS.
+  currentStatus.pw4 = (window.buffer[82] << 8) + window.buffer[81]; //Pulsewidth 4 multiplied by 10 in ms. Have to convert from uS to mS.
   currentStatus.status3 = window.buffer[83];
   currentStatus.engineProtectStatus = window.buffer[84];
-  currentStatus.fuelLoad = (window.buffer[85] << 8) + window.buffer[86];
-  currentStatus.ignLoad = (window.buffer[87] << 8) + window.buffer[88];
-  currentStatus.dwell = (window.buffer[89] << 8) + window.buffer[90];
+  currentStatus.fuelLoad = (window.buffer[86] << 8) + window.buffer[85];
+  currentStatus.ignLoad = (window.buffer[88] << 8) + window.buffer[87];
+  currentStatus.dwell = (window.buffer[90] << 8) + window.buffer[89];
   currentStatus.CLIdleTarget = window.buffer[91];
   currentStatus.mapDOT = window.buffer[92];
   currentStatus.vvt1Angle = window.buffer[93];
   currentStatus.vvt1TargetAngle = window.buffer[94];
   currentStatus.vvt1Duty = window.buffer[95];
-  currentStatus.flexBoostCorrection = (window.buffer[96] << 8) + window.buffer[97];
+  currentStatus.flexBoostCorrection = (window.buffer[97] << 8) + window.buffer[96];
   currentStatus.baroCorrection = window.buffer[98];
   currentStatus.VE = window.buffer[99]; //Current VE (%). Can be equal to VE1 or VE2 or a calculated value from both of them
   currentStatus.ASEValue = window.buffer[100]; //Current ASE (%)
-  currentStatus.vss = (window.buffer[101] << 8) + window.buffer[102];
+  currentStatus.vss = (window.buffer[102] << 8) + window.buffer[101];
   currentStatus.gear = window.buffer[103];
   currentStatus.fuelPressure = window.buffer[104];
   currentStatus.oilPressure = window.buffer[105];
@@ -200,7 +202,7 @@ function parseBuffer() {
   currentStatus.advance2 = window.buffer[115]; //advance 2 (%)
   // window.buffer[116] = 0; //Currently unused
 
-  console.log(currentStatus);
+  // console.log(currentStatus);
   window.buffer = [];
 
   updateOutputsRawText();
