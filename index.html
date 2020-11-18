@@ -901,7 +901,7 @@ function setSizes() {
 
 
 
-function setRpmNeedle(rpm) {
+function updateOutput_rpm(rpm) {
   var mainbg = document.getElementById("pidisplayBorder");
   if (rpm > 6000) {
     mainbg.classList.remove("flashingYellow");
@@ -1170,7 +1170,7 @@ window.addEventListener("resize", setSizes);
 setSizes();
 
 setBoostNeedle(1000);
-setRpmNeedle(0);
+updateOutput_rpm(0);
 
 
 

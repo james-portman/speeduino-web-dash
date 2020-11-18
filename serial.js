@@ -244,10 +244,6 @@ function updateOutputsRawText() {
   }
 }
 
-function updateOutput_rpm() {
-  console.log("updateOutput_rpm called");
-  // e.g. update RPM gauge needle here
-}
 
 function testdata() {
   // 117 bytes like the speeduinos return
