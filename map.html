@@ -1,0 +1,156 @@
+<html>
+<style>
+td {
+  border: 1px solid black;
+}
+</style>
+
+<a href="Speeduino base tune.msq">Download base tune file to test this with</a><br/>
+<br/>
+<input type="file" id="file-input" /><br/>
+
+<br/>
+
+VE Table:<br/>
+<table id="veTable">
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
+
+<script type="text/javascript">
+//
+// fetch('Speeduino base tune.msq')
+// .then(
+//   function(response) {
+//     if (response.status !== 200) {
+//       console.log('Looks like there was a problem. Status Code: ' +
+//         response.status);
+//       return;
+//     }
+//     response.text().then(function (text) {
+//         parse(text);
+//     });
+//   }
+// )
+// .catch(function(err) {
+//   console.log('Fetch Error :-S', err);
+// });
+
+function percentColourCell(tableCell, percent) {
+  // TODO: do as classes/css
+  if (percent > 80) { bg = "red"; color = "white";}
+  else if (percent > 60) { bg = "yellow"; color = "black";}
+  else if (percent > 40) { bg = "orange"; color = "black";}
+  else              { bg = "blue"; color = "white";}
+
+  tableCell.style.background = bg;
+  tableCell.style.color = color;
+}
+
+function parse(text) {
+
+  parser = new DOMParser();
+  xml = parser.parseFromString(text,"text/xml");
+
+  window.xml = xml;
+  console.log(xml);
+
+  userComments = xml.getElementsByTagName("userComments");
+  console.log(userComments[0].getAttribute("Comment"));
+
+  pages = xml.getElementsByTagName("page");
+  console.log(pages);
+
+  pages = xml.getElementsByTagName("page");
+
+  veTableDiv = document.getElementById("veTable");
+
+  veTable = xml.getElementsByName("veTable")[0];
+  console.log(veTable);
+  veTableNumCols = veTable.getAttribute("cols");
+  console.log(veTableNumCols);
+  veTableNumRows = veTable.getAttribute("rows");
+  console.log(veTableNumRows);
+  veTableUnits = veTable.getAttribute("units");
+  console.log(veTableUnits);
+
+  console.log(veTable.textContent);
+  rows = veTable.textContent.split("\n");
+  console.log(rows);
+
+  // random whitespace was in tune file (is it random?)
+  newRows = [];
+  for (rowNum in rows) {
+    rows[rowNum] = rows[rowNum].trim();
+    if (rows[rowNum] != "") {
+      newRows.push(rows[rowNum]);
+    }
+  }
+  rows = newRows;
+
+
+  for (rowNum in rows) {
+    // console.log("row: "+rowNum);
+    row = rows[rowNum];
+    row = row.trim(); // random whitespace was in tune file (is it random?)
+    if (row == "") {
+      // console.log("empty row");
+      continue;
+    }
+    // console.log(row);
+    var cells = row.split(" ");
+    // console.log(cells);
+    for (cellNum in cells) {
+      // console.log(cellNum);
+      tableCell = veTableDiv.children[0].children[rowNum].children[cellNum];
+      tableCell.innerText = cells[cellNum];
+      // tableCell.style.background = percentColourCell(cells[cellNum]);
+      percentColourCell(tableCell, cells[cellNum]);
+    }
+  }
+}
+
+
+
+function readSingleFile(e) {
+  var file = e.target.files[0];
+  if (!file) {
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var contents = e.target.result;
+    // displayContents(contents);
+    parse(contents);
+
+  };
+  reader.readAsText(file);
+}
+
+// function displayContents(contents) {
+//   var element = document.getElementById('file-content');
+//   element.textContent = contents;
+// }
+
+document.getElementById('file-input')
+  .addEventListener('change', readSingleFile, false);
+
+
+
+</script>
+
+</html>
