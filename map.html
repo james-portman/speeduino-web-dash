@@ -5,13 +5,18 @@ td {
 }
 </style>
 
-<a href="Speeduino base tune.msq">Download base tune file to test this with</a><br/>
-<br/>
+<h2>Load local tune file:</h2>
 <input type="file" id="file-input" /><br/>
-
+<a href="Speeduino base tune.msq">(Download base tune file to test local file open/load with)</a><br/>
 <br/>
 
-VE Table:<br/>
+<h2>Load from URL/internet</h2>
+<input id="fileUrl" type="text" value="Speeduino base tune.msq">
+<input type="button" onclick="loadFileUrlButton();" value="Load">
+<br/>
+<br/>
+<h2>VE Table</h2>
+<br/>
 <table id="veTable">
   <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
   <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
@@ -32,23 +37,34 @@ VE Table:<br/>
 </table>
 
 <script type="text/javascript">
-//
-// fetch('Speeduino base tune.msq')
-// .then(
-//   function(response) {
-//     if (response.status !== 200) {
-//       console.log('Looks like there was a problem. Status Code: ' +
-//         response.status);
-//       return;
-//     }
-//     response.text().then(function (text) {
-//         parse(text);
-//     });
-//   }
-// )
-// .catch(function(err) {
-//   console.log('Fetch Error :-S', err);
-// });
+// set value for text box to make it obvious
+fileUrlTextBox = document.getElementById("fileUrl");
+fileUrlTextBox.value = window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/"+fileUrlTextBox.value
+
+
+function loadFileUrlButton() {
+  fileUrlTextBox = document.getElementById("fileUrl");
+  loadFromUrl(fileUrlTextBox.value);
+}
+
+function loadFromUrl(url) {
+  fetch(url)
+  .then(
+    function(response) {
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+          response.status);
+        return;
+      }
+      response.text().then(function (text) {
+          parse(text);
+      });
+    }
+  )
+  .catch(function(err) {
+    console.log('Fetch Error :-S', err);
+  });
+}
 
 function percentColourCell(tableCell, percent) {
   // TODO: do as classes/css
@@ -67,30 +83,30 @@ function parse(text) {
   xml = parser.parseFromString(text,"text/xml");
 
   window.xml = xml;
-  console.log(xml);
+  // console.log(xml);
 
   userComments = xml.getElementsByTagName("userComments");
-  console.log(userComments[0].getAttribute("Comment"));
+  // console.log(userComments[0].getAttribute("Comment"));
 
   pages = xml.getElementsByTagName("page");
-  console.log(pages);
+  // console.log(pages);
 
   pages = xml.getElementsByTagName("page");
 
   veTableDiv = document.getElementById("veTable");
 
   veTable = xml.getElementsByName("veTable")[0];
-  console.log(veTable);
+  // console.log(veTable);
   veTableNumCols = veTable.getAttribute("cols");
-  console.log(veTableNumCols);
+  // console.log(veTableNumCols);
   veTableNumRows = veTable.getAttribute("rows");
-  console.log(veTableNumRows);
+  // console.log(veTableNumRows);
   veTableUnits = veTable.getAttribute("units");
-  console.log(veTableUnits);
+  // console.log(veTableUnits);
 
-  console.log(veTable.textContent);
+  // console.log(veTable.textContent);
   rows = veTable.textContent.split("\n");
-  console.log(rows);
+  // console.log(rows);
 
   // random whitespace was in tune file (is it random?)
   newRows = [];
@@ -126,6 +142,7 @@ function parse(text) {
 
 
 
+// file open function:
 function readSingleFile(e) {
   var file = e.target.files[0];
   if (!file) {
@@ -140,11 +157,6 @@ function readSingleFile(e) {
   };
   reader.readAsText(file);
 }
-
-// function displayContents(contents) {
-//   var element = document.getElementById('file-content');
-//   element.textContent = contents;
-// }
 
 document.getElementById('file-input')
   .addEventListener('change', readSingleFile, false);
