@@ -39,7 +39,12 @@ td {
 <script type="text/javascript">
 // set value for text box to make it obvious
 fileUrlTextBox = document.getElementById("fileUrl");
-fileUrlTextBox.value = window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/"+fileUrlTextBox.value
+if (window.location.port == "") {
+  port = "";
+} else {
+  port = ":"+window.location.port;
+}
+fileUrlTextBox.value = window.location.protocol+"//"+window.location.hostname+port+"/"+fileUrlTextBox.value
 
 
 function loadFileUrlButton() {
