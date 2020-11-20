@@ -7,11 +7,11 @@ td {
 
 <h2>Load local tune file:</h2>
 <input type="file" id="file-input" /><br/>
-<a href="Speeduino base tune.msq">(Download base tune file to test local file open/load with)</a><br/>
+<a href="https://raw.githubusercontent.com/noisymime/speeduino/master/reference/Base%20Tunes/Speeduino%20base%20tune.msq">(Download base tune file to test local file open/load with)</a><br/>
 <br/>
 
 <h2>Load from URL/internet</h2>
-<input id="fileUrl" type="text" value="Speeduino base tune.msq">
+<input id="fileUrl" type="text" value="https://raw.githubusercontent.com/noisymime/speeduino/master/reference/Base%20Tunes/Speeduino%20base%20tune.msq">
 <input type="button" onclick="loadFileUrlButton();" value="Load">
 <br/>
 <br/>
@@ -37,15 +37,6 @@ td {
 </table>
 
 <script type="text/javascript">
-// set value for text box to make it obvious
-fileUrlTextBox = document.getElementById("fileUrl");
-if (window.location.port == "") {
-  port = "";
-} else {
-  port = ":"+window.location.port;
-}
-fileUrlTextBox.value = window.location.protocol+"//"+window.location.hostname+port+"/"+fileUrlTextBox.value
-
 
 function loadFileUrlButton() {
   fileUrlTextBox = document.getElementById("fileUrl");
