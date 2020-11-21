@@ -4,8 +4,14 @@ td, th {
   border: 1px solid black;
 }
 </style>
-TODO: dynamic html table creation<br/>
+README:<br/>
+Advise you use Google Chrome/Chromium until this matures<br/>
+Click cells to edit them, press enter or click away to save, press Esc or click cancel to cancel changing it<br/>
 <br/>
+TODO:<br/>
+redo table cell colours on edit<br/>
+<br/>
+<hr/>
 <h2>Load local tune file:</h2>
 <input type="file" id="file-input" /><br/>
 <a href="https://raw.githubusercontent.com/noisymime/speeduino/master/reference/Base%20Tunes/Speeduino%20base%20tune.msq">(Download base tune file to test local file open/load with)</a><br/>
@@ -18,6 +24,7 @@ TODO: dynamic html table creation<br/>
 <br/>
 
 <h2>Save to new file</h2>
+(Doesn't actually save changes yet)<br/>
 <input type="button" onclick="saveNewFile();" value="save">
 <br/>
 <br/>
@@ -28,54 +35,31 @@ TODO: dynamic html table creation<br/>
 <h2>veTable</h2>
 <div id="veTableUnits"></div>
 <div id="veTable_wrapper"></div>
-<!-- <table id="veTable">
-  <tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
-
-  <tr><th></th>  <td id="veTable_0_0"></td><td id="veTable_0_1"></td><td  id="veTable_0_2"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-  <tr><th></th>  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-  <tr><th></th>  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-  <tr><th></th>  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-  <tr><th></th>  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-  <tr><th></th>  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-  <tr><th></th>  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-  <tr><th></th>  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-  <tr><th></th>  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-  <tr><th></th>  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-  <tr><th></th>  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-  <tr><th></th>  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-  <tr><th></th>  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-  <tr><th></th>  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-  <tr><th></th>  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-  <tr><th></th>  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-</table> -->
 <br/>
-
 <hr/>
 
 <h2>advTable1</h2>
 <div id="advTable1Units"></div>
 <div id="advTable1_wrapper"></div>
 <br/>
-
 <hr/>
 
 <h2>afrTable</h2>
 <div id="afrTableUnits"></div>
 <div id="afrTable_wrapper"></div>
 <br/>
-
 <hr/>
 
 <h2>boostTable</h2>
 <div id="boostTableUnits"></div>
 <div id="boostTable_wrapper"></div>
 <br/>
-
 <hr/>
 
 <h2>vvtTable</h2>
 <div id="vvtTableUnits"></div>
 <div id="vvtTable_wrapper"></div>
+<br/>
 
 <script type="text/javascript">
 
@@ -83,15 +67,88 @@ TODO: dynamic html table creation<br/>
 document.getElementById('file-input')
   .addEventListener('change', readSingleFile, false);
 
-document.querySelectorAll('td')
-.forEach(e => e.addEventListener("click", function() {
-    console.log("clicked")
-    console.log(this);
-}));
-
+function addTdClickListeners() {
+  document.querySelectorAll('td')
+  .forEach(e => e.addEventListener("click", tdClicked, false));
+}
 
 // debug - auto load a tune file
 loadFromUrl("https://raw.githubusercontent.com/noisymime/speeduino/master/reference/Base%20Tunes/Speeduino%20base%20tune.msq");
+
+
+
+let editingTd;
+function tdClicked(event) {
+  // console.log(event);
+  var td = event.target;
+  // 3 possible targets
+  let target = td.closest('.edit-cancel,.edit-ok,td');
+  if (target.className == 'edit-cancel') {
+    finishTdEdit(editingTd.elem, false);
+  } else if (target.className == 'edit-ok') {
+    finishTdEdit(editingTd.elem, true);
+  } else if (target.nodeName == 'TD') {
+    if (editingTd) return; // already editing
+
+    makeTdEditable(target);
+  }
+}
+function textEditBlurred(event) {
+  var td = event.target.parentElement;
+  finishTdEdit(td, true);
+}
+function textEditKeyUp(event) {
+  // console.log(event);
+  if (event.keyCode === 13) { // enter
+    // Cancel the default action, if needed
+    event.preventDefault();
+    var td = event.target.parentElement;
+    finishTdEdit(td, true);
+  } else if (event.keyCode === 27) { // escape
+    // Cancel the default action, if needed
+    event.preventDefault();
+    var td = event.target.parentElement;
+    finishTdEdit(td, false);
+  }
+}
+function makeTdEditable(td) {
+  editingTd = {
+    elem: td,
+    data: td.innerHTML
+  };
+
+  td.classList.add('edit-td'); // td is in edit state, CSS also styles the area inside
+
+  let textArea = document.createElement('input');
+  textArea.type = "text";
+  textArea.onblur = textEditBlurred;
+  textArea.onkeyup = textEditKeyUp;
+  textArea.style.width = td.clientWidth + 'px';
+  textArea.style.height = td.clientHeight + 'px';
+  textArea.className = 'edit-area';
+
+  textArea.value = td.innerHTML;
+  td.innerHTML = '';
+  td.appendChild(textArea);
+  textArea.focus();
+  textArea.setSelectionRange(0, textArea.value.length)
+
+  td.insertAdjacentHTML("beforeEnd",
+    '<div class="edit-controls"><button class="edit-cancel">CANCEL</button></div>'
+  );
+}
+function finishTdEdit(td, isOk) {
+  if (isOk) {
+    // TODO: save change to window.xml somehow
+    td.innerHTML = td.firstChild.value;
+  } else {
+    td.innerHTML = editingTd.data;
+  }
+  td.classList.remove('edit-td');
+  editingTd = null;
+}
+
+
 
 
 // file open function:
@@ -217,7 +274,9 @@ function createTable(name) {
       newRow.appendChild(newCell);
     }
   }
+  addTdClickListeners();
 }
+
 
 
 function getAndOutputTable(mainData, colHeader, rowHeader) {
