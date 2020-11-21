@@ -6,10 +6,12 @@ td, th {
 </style>
 README:<br/>
 Advise you use Google Chrome/Chromium until this matures<br/>
-Click cells to edit them, press enter or click away to save, press Esc or click cancel to cancel changing it<br/>
+Click cells to edit them, press enter or click away to save, press Esc or click cancel your changes<br/>
 <br/>
 TODO:<br/>
 redo table cell colours on edit<br/>
+use arrow keys to move around tables without having to click again<br/>
+select and edit entire rows/cols/tables/areas of tables?<br/>
 <br/>
 <hr/>
 <h2>Load local tune file:</h2>
@@ -24,7 +26,6 @@ redo table cell colours on edit<br/>
 <br/>
 
 <h2>Save to new file</h2>
-(Doesn't actually save changes yet)<br/>
 <input type="button" onclick="saveNewFile();" value="save">
 <br/>
 <br/>
@@ -76,6 +77,8 @@ function addTdClickListeners() {
 loadFromUrl("https://raw.githubusercontent.com/noisymime/speeduino/master/reference/Base%20Tunes/Speeduino%20base%20tune.msq");
 
 
+window.tables = {};
+
 
 let editingTd;
 function tdClicked(event) {
@@ -94,6 +97,7 @@ function tdClicked(event) {
   }
 }
 function textEditBlurred(event) {
+  event.preventDefault();
   var td = event.target.parentElement;
   finishTdEdit(td, true);
 }
@@ -139,8 +143,18 @@ function makeTdEditable(td) {
 }
 function finishTdEdit(td, isOk) {
   if (isOk) {
-    // TODO: save change to window.xml somehow
+    td.firstChild.onblur = null; // stop blur from triggering when we do the next line
     td.innerHTML = td.firstChild.value;
+
+    // save to tables[tablename]["data"]
+    var tableName = td.parentElement.parentElement.id;
+    var row = td.getAttribute("data-row");
+    var col = td.getAttribute("data-col");
+    tables[tableName]["data"][row][col] = td.innerHTML;
+
+    // save to window.xml too?
+    updateXmlTable(tableName, tables[tableName]["data"]);
+
   } else {
     td.innerHTML = editingTd.data;
   }
@@ -242,7 +256,7 @@ function getBibliography() {
 
 function createTable(name) {
   wrapper = document.getElementById(name+"_wrapper");
-  console.log("creating table");
+  // console.log("creating table");
 
 
   newTable = document.createElement("TABLE");
@@ -271,6 +285,8 @@ function createTable(name) {
     for (var j=0; j<16; j++) {
       var newCell = document.createElement("TD");
       newCell.id = name+"_"+i+"_"+j;
+      newCell.setAttribute("data-row", i);
+      newCell.setAttribute("data-col", j);
       newRow.appendChild(newCell);
     }
   }
@@ -304,6 +320,7 @@ function getAndOutputTable(mainData, colHeader, rowHeader) {
   }
 
   veTable = getTable(mainData);
+  window.tables[mainData] = veTable;
 
   // get min and max for percentage/colouring
   var minValue = 99999;
@@ -361,9 +378,27 @@ function getTable(name) {
   return output;
 }
 
+function updateXmlTable(name, data) {
+  element = xml.getElementsByName(name)[0];
+  // console.log("Updating xml");
+  //
+  // console.log(element);
+  // console.log(data);
+
+  var output = []
+  for (var row=0; row<data.length; row++) {
+    // var row = data[i];
+    output[row] = data[row].join(" ");
+  }
+  output = output.join("\n");
+  element.textContent = "\n"+output+"\n";
+
+}
+
+
 
 function saveNewFile() {
-  console.log(xml.documentElement.outerHTML);
+  // console.log(xml.documentElement.outerHTML);
   downloadTextAsFile(xml.documentElement.outerHTML, "tune.msq");
 
 }
