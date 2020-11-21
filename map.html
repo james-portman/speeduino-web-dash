@@ -5,6 +5,7 @@ td, th {
 }
 </style>
 README:<br/>
+This is very, very new and only potentially working, do not expect much or you will be disappointed..<br/>
 Advise you use Google Chrome/Chromium until this matures<br/>
 Click cells to edit them, press enter or click away to save, press Esc or click cancel your changes<br/>
 <br/>
@@ -31,6 +32,12 @@ select and edit entire rows/cols/tables/areas of tables?<br/>
 <br/>
 <br/>
 
+<hr/>
+
+<h2>Loaded file:</h2>
+<div id="loadedFileInfo">None loaded yet</div>
+<br/>
+<br/>
 <hr/>
 
 <h2>veTable</h2>
@@ -64,6 +71,7 @@ select and edit entire rows/cols/tables/areas of tables?<br/>
 
 <script type="text/javascript">
 
+var loadedFileInfoDiv = document.getElementById("loadedFileInfo");
 
 document.getElementById('file-input')
   .addEventListener('change', readSingleFile, false);
@@ -174,7 +182,7 @@ function readSingleFile(e) {
   var reader = new FileReader();
   reader.onload = function(e) {
     var contents = e.target.result;
-    // displayContents(contents);
+    loadedFileInfoDiv.innerText = "from local file: "+file.name;
     parse(contents);
 
   };
@@ -197,7 +205,8 @@ function loadFromUrl(url) {
         return;
       }
       response.text().then(function (text) {
-          parse(text);
+        loadedFileInfoDiv.innerText = "From URL: "+url;
+        parse(text);
       });
     }
   )
