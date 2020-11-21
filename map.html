@@ -264,6 +264,12 @@ function getBibliography() {
 
 
 function createTable(name) {
+  var existingTable = document.getElementById(name);
+  if (existingTable != null) {
+    // console.log("Table already exists");
+    return;
+  }
+
   wrapper = document.getElementById(name+"_wrapper");
   // console.log("creating table");
 
