@@ -255,6 +255,23 @@ function getAndOutputTable(mainData, colHeader, rowHeader) {
   }
 
   veTable = getTable(mainData);
+
+  // get min and max for percentage/colouring
+  var minValue = 99999;
+  var maxValue = -99999;
+  for (rowNum in veTable["data"]) {
+    for (cellNum in veTable["data"][rowNum]) {
+      var cellValue = parseInt(veTable["data"][rowNum][cellNum]);
+      if (cellValue > maxValue) {
+        maxValue = cellValue;
+      }
+      if (cellValue < minValue) {
+        minValue = cellValue;
+      }
+    }
+  }
+  var valueRange = maxValue - minValue;
+
   for (rowNum in veTable["data"]) {
     for (cellNum in veTable["data"][rowNum]) {
       cellX = 1+parseInt(cellNum);
@@ -262,7 +279,8 @@ function getAndOutputTable(mainData, colHeader, rowHeader) {
       tableCell = tableDiv.children[0].children[cellY].children[cellX];
       cellValue = veTable["data"][rowNum][cellNum];
       tableCell.innerText = cellValue;
-      percentColourCell(tableCell, cellValue);
+      cellPercent = ((cellValue-minValue)/valueRange)*100;
+      percentColourCell(tableCell, cellPercent);
     }
   }
 
