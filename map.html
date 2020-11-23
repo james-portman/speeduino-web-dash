@@ -41,6 +41,12 @@ select and edit entire rows/cols/tables/areas of tables?<br/>
 <br/>
 <hr/>
 
+<h2>wueAFR</h2>
+<div id="wueAFRUnits"></div>
+<div id="wueAFR_wrapper"></div>
+<br/>
+<hr/>
+
 <h2>veTable</h2>
 <div id="veTableUnits"></div>
 <div id="veTable_wrapper"></div>
@@ -278,6 +284,9 @@ function parse(text) {
   pages = xml.getElementsByTagName("page");
   getBibliography();
 
+  getAndOutputTable("wueAFR");
+
+
   getAndOutputTable("veTable", "rpmBins", "fuelLoadBins");
   getAndOutputTable("advTable1", "rpmBins2", "mapBins1");
   getAndOutputTable("afrTable", "rpmBinsAFR", "loadBinsAFR");
@@ -307,7 +316,8 @@ function getBibliography() {
 }
 
 
-function createTable(name) {
+function createTable(table) {
+  name = table["name"];
   var existingTable = document.getElementById(name);
   if (existingTable != null) {
     // console.log("Table already exists");
@@ -326,14 +336,14 @@ function createTable(name) {
   newTable.appendChild(headerRow);
 
   headerRow.appendChild(document.createElement("TH")); // empty top corner
-  for (var i=0; i<16; i++) {
+  for (var i=0; i<table["cols"]; i++) {
     var th = document.createElement("TH");
     th.id = name+"_colHeader_"+i;
     headerRow.appendChild(th); // headers
   }
 
   // rest of rows
-  for (var i=0; i<16; i++) {
+  for (var i=0; i<table["rows"]; i++) {
     newRow = document.createElement("TR");
     newTable.appendChild(newRow);
 
@@ -341,7 +351,7 @@ function createTable(name) {
     th.id = name+"_rowHeader_"+i;
     newRow.appendChild(th);
 
-    for (var j=0; j<16; j++) {
+    for (var j=0; j<table["cols"]; j++) {
       var newCell = document.createElement("TD");
       newCell.id = name+"_"+i+"_"+j;
       newCell.setAttribute("data-row", i);
@@ -355,31 +365,36 @@ function createTable(name) {
 
 
 function getAndOutputTable(mainData, colHeader, rowHeader) {
-  createTable(mainData);
+
+  veTable = getTable(mainData);
+  window.tables[mainData] = veTable;
+
+  createTable(veTable);
 
   // TODO: anon the var names in here
   tableDiv = document.getElementById(mainData);
   veTableUnitsDiv = document.getElementById(mainData+"Units");
 
-  rpmBins = getTable(colHeader);
-  for (x in rpmBins["data"]) {
-    for (y in rpmBins["data"][x]) {
-      tableCell = document.getElementById(mainData+"_colHeader_"+x);
-      tableCell.innerText = rpmBins["data"][x][y];
+  if (colHeader != null) {
+    rpmBins = getTable(colHeader);
+    for (x in rpmBins["data"]) {
+      for (y in rpmBins["data"][x]) {
+        tableCell = document.getElementById(mainData+"_colHeader_"+x);
+        tableCell.innerText = rpmBins["data"][x][y];
+      }
     }
   }
 
-  fuelLoadBins = getTable(rowHeader);
-  // console.log(fuelLoadBins);
-  for (rowNum in fuelLoadBins["data"]) {
-    for (cellNum in fuelLoadBins["data"][rowNum]) {
-      tableCell = document.getElementById(mainData+"_rowHeader_"+rowNum);
-      tableCell.innerText = fuelLoadBins["data"][rowNum][cellNum];
+  if (rowHeader != null) {
+    fuelLoadBins = getTable(rowHeader);
+    // console.log(fuelLoadBins);
+    for (rowNum in fuelLoadBins["data"]) {
+      for (cellNum in fuelLoadBins["data"][rowNum]) {
+        tableCell = document.getElementById(mainData+"_rowHeader_"+rowNum);
+        tableCell.innerText = fuelLoadBins["data"][rowNum][cellNum];
+      }
     }
   }
-
-  veTable = getTable(mainData);
-  window.tables[mainData] = veTable;
 
   // get min and max for percentage/colouring
   var minValue = 99999;
@@ -407,7 +422,10 @@ function getAndOutputTable(mainData, colHeader, rowHeader) {
     }
   }
 
-  veTableUnitsDiv.innerText = veTable["units"]+" as "+fuelLoadBins["units"]+" vs "+rpmBins["units"];
+  veTableUnitsDiv.innerText = veTable["units"]
+  if (colHeader != null && rowHeader != null) {
+    veTableUnitsDiv.innerText += " as "+fuelLoadBins["units"]+" vs "+rpmBins["units"];
+  }
 
 }
 
