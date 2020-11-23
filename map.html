@@ -70,6 +70,43 @@ select and edit entire rows/cols/tables/areas of tables?<br/>
 <div id="vvtTable_wrapper"></div>
 <br/>
 
+
+<h2>stagingTable</h2>
+<div id="stagingTableUnits"></div>
+<div id="stagingTable_wrapper"></div>
+<br/>
+
+<h2>fuelTrim1Table</h2>
+<div id="fuelTrim1TableUnits"></div>
+<div id="fuelTrim1Table_wrapper"></div>
+<br/>
+
+<h2>fuelTrim2Table</h2>
+<div id="fuelTrim2TableUnits"></div>
+<div id="fuelTrim2Table_wrapper"></div>
+<br/>
+
+<h2>fuelTrim3Table</h2>
+<div id="fuelTrim3TableUnits"></div>
+<div id="fuelTrim3Table_wrapper"></div>
+<br/>
+
+<h2>fuelTrim4Table</h2>
+<div id="fuelTrim4TableUnits"></div>
+<div id="fuelTrim4Table_wrapper"></div>
+<br/>
+
+<h2>veTable2</h2>
+<div id="veTable2Units"></div>
+<div id="veTable2_wrapper"></div>
+<br/>
+
+<h2>wmiTable</h2>
+<div id="wmiTableUnits"></div>
+<div id="wmiTable_wrapper"></div>
+<br/>
+
+
 <script type="text/javascript">
 
 var loadedFileInfoDiv = document.getElementById("loadedFileInfo");
@@ -242,14 +279,20 @@ function parse(text) {
   getBibliography();
 
   getAndOutputTable("veTable", "rpmBins", "fuelLoadBins");
-
   getAndOutputTable("advTable1", "rpmBins2", "mapBins1");
-
   getAndOutputTable("afrTable", "rpmBinsAFR", "loadBinsAFR");
-
   getAndOutputTable("boostTable", "rpmBinsBoost", "tpsBinsBoost");
-
   getAndOutputTable("vvtTable", "rpmBinsVVT", "loadBinsVVT");
+
+  getAndOutputTable("stagingTable", "rpmBinsStaging", "loadBinsStaging");
+  getAndOutputTable("fuelTrim1Table", "fuelTrim1rpmBins", "fuelTrim1loadBins");
+  getAndOutputTable("fuelTrim2Table", "fuelTrim2rpmBins", "fuelTrim2loadBins");
+  getAndOutputTable("fuelTrim3Table", "fuelTrim3rpmBins", "fuelTrim3loadBins");
+  getAndOutputTable("fuelTrim4Table", "fuelTrim4rpmBins", "fuelTrim4loadBins");
+  getAndOutputTable("veTable2", "fuelRPM2Bins", "fuelLoad2Bins");
+  getAndOutputTable("wmiTable", "rpmBinsWMI", "mapBinsWMI");
+
+
 }
 
 
