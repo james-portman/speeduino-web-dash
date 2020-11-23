@@ -41,77 +41,7 @@ select and edit entire rows/cols/tables/areas of tables?<br/>
 <br/>
 <hr/>
 
-<h2>wueAFR</h2>
-<div id="wueAFRUnits"></div>
-<div id="wueAFR_wrapper"></div>
-<br/>
-<hr/>
-
-<h2>veTable</h2>
-<div id="veTableUnits"></div>
-<div id="veTable_wrapper"></div>
-<br/>
-<hr/>
-
-<h2>advTable1</h2>
-<div id="advTable1Units"></div>
-<div id="advTable1_wrapper"></div>
-<br/>
-<hr/>
-
-<h2>afrTable</h2>
-<div id="afrTableUnits"></div>
-<div id="afrTable_wrapper"></div>
-<br/>
-<hr/>
-
-<h2>boostTable</h2>
-<div id="boostTableUnits"></div>
-<div id="boostTable_wrapper"></div>
-<br/>
-<hr/>
-
-<h2>vvtTable</h2>
-<div id="vvtTableUnits"></div>
-<div id="vvtTable_wrapper"></div>
-<br/>
-
-
-<h2>stagingTable</h2>
-<div id="stagingTableUnits"></div>
-<div id="stagingTable_wrapper"></div>
-<br/>
-
-<h2>fuelTrim1Table</h2>
-<div id="fuelTrim1TableUnits"></div>
-<div id="fuelTrim1Table_wrapper"></div>
-<br/>
-
-<h2>fuelTrim2Table</h2>
-<div id="fuelTrim2TableUnits"></div>
-<div id="fuelTrim2Table_wrapper"></div>
-<br/>
-
-<h2>fuelTrim3Table</h2>
-<div id="fuelTrim3TableUnits"></div>
-<div id="fuelTrim3Table_wrapper"></div>
-<br/>
-
-<h2>fuelTrim4Table</h2>
-<div id="fuelTrim4TableUnits"></div>
-<div id="fuelTrim4Table_wrapper"></div>
-<br/>
-
-<h2>veTable2</h2>
-<div id="veTable2Units"></div>
-<div id="veTable2_wrapper"></div>
-<br/>
-
-<h2>wmiTable</h2>
-<div id="wmiTableUnits"></div>
-<div id="wmiTable_wrapper"></div>
-<br/>
-
+<div id="tables"></div>
 
 <script type="text/javascript">
 
@@ -285,6 +215,7 @@ function parse(text) {
   getBibliography();
 
   getAndOutputTable("wueAFR");
+  getAndOutputTable("wueRecommended");
 
 
   getAndOutputTable("veTable", "rpmBins", "fuelLoadBins");
@@ -324,7 +255,21 @@ function createTable(table) {
     return;
   }
 
-  wrapper = document.getElementById(name+"_wrapper");
+
+  var tablesDiv = document.getElementById("tables");
+  var wrapper = document.createElement("DIV");
+  tablesDiv.appendChild(wrapper);
+  wrapper.id = name+"_wrapper";
+
+  var h2 = document.createElement("H2");
+  h2.innerText = name;
+  wrapper.appendChild(h2);
+
+  var unitsDiv = document.createElement("DIV");
+  wrapper.appendChild(unitsDiv);
+  unitsDiv.id= name+"Units";
+
+  // wrapper = document.getElementById(name+"_wrapper");
   // console.log("creating table");
 
 
