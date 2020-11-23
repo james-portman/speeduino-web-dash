@@ -214,12 +214,31 @@ function parse(text) {
   pages = xml.getElementsByTagName("page");
   getBibliography();
 
-  getAndOutputTable("wueAFR");
-  getAndOutputTable("wueRecommended");
+  getAndOutputTable("wueRates", null, "wueBins");
+  getAndOutputTable("injAng");
+  getAndOutputTable("asePct");
+  getAndOutputTable("aseCount", null, "aseBins");
+  getAndOutputTable("primePulse", null, "primeBins");
+
+  getAndOutputTable("injAngRPM");
+  getAndOutputTable("unused2-95");
 
 
   getAndOutputTable("veTable", "rpmBins", "fuelLoadBins");
   getAndOutputTable("advTable1", "rpmBins2", "mapBins1");
+
+  getAndOutputTable("taeRates", null, "taeBins");
+  getAndOutputTable("iatRetRates", null, "iatRetBins");
+  // getAndOutputTable("dwellRates", "");
+  getAndOutputTable("cltAdvValues", null, "cltAdvBins");
+  getAndOutputTable("maeRates", null, "maeBins");
+  getAndOutputTable("baroFuelValues", null, "baroFuelBins");
+
+  getAndOutputTable("idleAdvValues", null, "idleAdvBins");
+  // brvBins
+  getAndOutputTable("injBatRates");
+  getAndOutputTable("airDenRates", null, "airDenBins");
+
   getAndOutputTable("afrTable", "rpmBinsAFR", "loadBinsAFR");
   getAndOutputTable("boostTable", "rpmBinsBoost", "tpsBinsBoost");
   getAndOutputTable("vvtTable", "rpmBinsVVT", "loadBinsVVT");
@@ -368,7 +387,13 @@ function getAndOutputTable(mainData, colHeader, rowHeader) {
   }
 
   veTableUnitsDiv.innerText = veTable["units"]
-  if (colHeader != null && rowHeader != null) {
+  if (colHeader == null && rowHeader == null) {
+
+  } else if (rowHeader == null) {
+    veTableUnitsDiv.innerText += " as "+rpmBins["units"];
+  } else if (colHeader == null) {
+    veTableUnitsDiv.innerText += " as "+fuelLoadBins["units"];
+  } else {
     veTableUnitsDiv.innerText += " as "+fuelLoadBins["units"]+" vs "+rpmBins["units"];
   }
 
