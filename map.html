@@ -215,13 +215,12 @@ function parse(text) {
   getBibliography();
 
   getAndOutputTable("wueRates", null, "wueBins");
-  getAndOutputTable("injAng");
-  getAndOutputTable("asePct");
+  getAndOutputTable("injAng", null, "injAngRPM");
+  getAndOutputTable("asePct", null, "aseBins");
   getAndOutputTable("aseCount", null, "aseBins");
   getAndOutputTable("primePulse", null, "primeBins");
 
-  getAndOutputTable("injAngRPM");
-  getAndOutputTable("unused2-95");
+  // getAndOutputTable("unused2-95");
 
 
   getAndOutputTable("veTable", "rpmBins", "fuelLoadBins");
@@ -229,14 +228,14 @@ function parse(text) {
 
   getAndOutputTable("taeRates", null, "taeBins");
   getAndOutputTable("iatRetRates", null, "iatRetBins");
-  // getAndOutputTable("dwellRates", "");
+  getAndOutputTable("dwellRates", null, "brvBins");
   getAndOutputTable("cltAdvValues", null, "cltAdvBins");
   getAndOutputTable("maeRates", null, "maeBins");
   getAndOutputTable("baroFuelValues", null, "baroFuelBins");
 
   getAndOutputTable("idleAdvValues", null, "idleAdvBins");
-  // brvBins
-  getAndOutputTable("injBatRates");
+
+  getAndOutputTable("injBatRates", null, "brvBins");
   getAndOutputTable("airDenRates", null, "airDenBins");
 
   getAndOutputTable("afrTable", "rpmBinsAFR", "loadBinsAFR");
